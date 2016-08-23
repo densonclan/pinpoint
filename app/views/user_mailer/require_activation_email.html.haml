@@ -1,0 +1,9 @@
+%p A new user has registered in Pinpoint and now requires activation.
+%p Details:
+%p
+  %label Name
+  = @user.name
+  %br/
+  %label Email
+  = @user.email
+%p= link_to "Click here to approve them", users_url(id: @user.id)

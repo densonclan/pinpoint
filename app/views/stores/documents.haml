@@ -1,0 +1,41 @@
+- content_for :title do
+  Documents for #{@store.account_number}
+= breadcrumbs [['Stores', stores_path], ["Store no. #{@store.account_number}", @store], ["Documents for #{@store.account_number}"]]
+
+.page-header
+  = render 'shared/search_form'
+  %h1
+    = "Documents for #{@store.account_number}"
+    %small
+      (#{@documents.count})
+      - if current_user.write_access?
+        = link_to "Add new", new_document_path(:store_id => @store.id)
+= render partial: 'menu'
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Store
+      %th Name
+      %th Description
+      %th Type
+      %th Actions
+  %tbody
+    - if @documents.blank?
+      %tr
+        %td{:colspan => "5"}
+          No documents yet.
+          - if current_user.write_access?
+            = link_to "Add one!", new_document_path(:store_id => @store.id)
+    - else
+      - @documents.each do |d|
+        %tr
+          %td= link_to d.store.account_number, d.store
+          %td= d.title
+          %td= d.description
+          %td= d.document_type
+          %td
+            - if can? :update, d
+              = link_to "Edit", edit_document_path(d)
+            = link_to "View file", d.file.url
+= will_paginate @documents

@@ -1,0 +1,24 @@
+= render "shared/error_messages", :target => @document
+= simple_form_for @document do |f|
+  %fieldset
+    = f.input :title
+    = f.input :description
+    .input.file.optional.document_file
+      = f.label :file
+      - if @document.file.exists?
+        .file-link= link_to @document.file_file_name, @document.file.url
+      = f.input_field :file
+    = f.input :document_type, collection: document_types
+    - if @document.store
+      %div
+        %label Account Number
+        = @document.store.account_number
+        = f.input_field :store_id, as: :hidden
+    - else
+      = f.input :account_number
+    %hr/
+    .pull-right
+      = f.submit "Save", :class => "btn btn-primary"
+      = link_to "Cancel", documents_path, :class =>"btn"
+      - unless @document.new_record?
+        = link_to "Delete", @document, confirm: 'Are you sure you want to delete it?', method: :delete, class: "btn btn-danger"

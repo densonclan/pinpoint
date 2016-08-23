@@ -1,0 +1,8 @@
+<% content_for :title do %>
+  Edit Store
+<% end %>
+<%= breadcrumbs [['Stores', stores_path], ["Store #{@store.account_number}", @store], ["Edit Store"]] %>
+<div class="page-header">
+  <h1>Edit Store</h1>
+</div>
+<%= render partial: 'form' %>

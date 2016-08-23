@@ -1,0 +1,40 @@
+<% content_for :title do %>
+  View Store
+<% end %>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag "//maps.google.com/maps/api/js?sensor=true", 'gmaps', map_store_path(@store) %>
+<% end %>
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li><%= link_to "Stores", stores_path %> <span class="divider">/</span></li>
+  <li class="active">View Store</li>
+</ul>
+
+<div class="page-header">
+  <h1>Store no. <%= @store.account_number %> (<%= @store.client.name %>)</h1>
+</div>
+
+<%= render partial: 'menu' %>
+
+<div class="row store-details">
+
+  <div class="span4">
+    <legend>Map of the store (<%= @store.account_number %>)</legend>
+    <div class="address spaced">
+      <p><%= @store.store_address.first_line %></p>
+      <p><%= @store.store_address.city %></p>
+      <p><%= @store.store_address.postcode %></p>
+    </div>
+    <div class="selector ">
+        <label for="radius">Radius of the circle (in miles)</label>
+        <input type="text" name="radius" id="radius" value="1">
+        <br />
+        <input class="btn change-radius" type="submit" value="Change">
+    </div>
+  </div>
+  <div class="span8">
+    <div class="map" id="map"></div>
+    <div class="map" id="road"></div>
+    <div class="map" id="pano"></div>
+  </div>
+</div>

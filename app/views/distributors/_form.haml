@@ -1,0 +1,13 @@
+= render "shared/error_messages", target: @distributor
+= simple_form_for @distributor do |f|
+  %fieldset
+    = f.input :name
+    = f.input :distributor_type, collection: distributor_types
+    = f.input :reference_number
+    = f.input :description
+    %hr/
+    .pull-right
+      = f.submit "Save", class: "btn btn-primary"
+      = link_to "Cancel", distributors_path, class: "btn"
+      - unless @distributor.new_record?
+        = link_to "Delete", @distributor, confirm: 'Are you sure you want to delete it?', method: :delete, class: "btn btn-danger"

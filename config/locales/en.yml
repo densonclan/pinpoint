@@ -1,0 +1,13 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        task:
+          attributes:
+            due_date:
+              on_or_after: "cannot be from the past."
+

@@ -1,0 +1,50 @@
+%div
+  %strong Legend:
+  %span.badge.badge-info{:style => "background-color: #d9edf7;"}  
+  Orders with distribution
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th #
+      %th= sortable "clients.name", "Client"
+      %th= sortable "stores.account_number", "Account no."
+      %th= sortable "stores.owner_name" ,"Owner's name"
+      %th= sortable "periods.period_number", "Distribution Period"
+      %th= sortable "orders.total_quantity",'Total Quantity'
+      %th= sortable "options.name", "Option"
+      %th Actions
+  %tbody
+    - if @orders.blank?
+      %tr
+        %td{:colspan => "10"}
+          There are no orders yet.
+          - if can? :create, Order
+            = link_to "Add one!", new_order_path
+    - else
+      - @orders.each do |o|
+        %tr{class: o.has_distribution? ? 'info' : ' '}
+          %td= o.id
+          %td= o.store.client.name
+          %td= link_to o.store.account_number, o.store
+          %td= o.store.owner_name
+          %td
+            - if o.period
+              = o.period.client.name
+              %strong
+                \##{o.period.period_number} #{o.period.year}
+            - else
+              \-
+          %td= o.total_quantity
+          %td= o.option ? o.option.name : '-'
+          %td
+            = link_to "Details", o
+            - unless current_user.read_only?
+              = link_to "Edit", edit_order_path(o)
+              = link_to 'Copy', copy_order_path(o)
+      - if @store
+        %tr.totals
+          %td Total
+          %td{colspan: 4} &nbsp;
+          %td= total_quantities_for_orders @orders
+          %td{colspan: 3} &nbsp;
+= will_paginate @orders, renderer: BootstrapPagination::Rails

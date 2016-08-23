@@ -1,0 +1,14 @@
+= render "shared/error_messages", :target => @template
+= simple_form_for @template do |f|
+  = hidden_field_tag :order_fields, export_template_fields
+  %fieldset
+    = f.input :name
+    .control-group
+      = f.label :value, "Included Fields", :class => "control-label"
+      .controls= f.hidden_field :value
+    %hr/
+    .pull-right
+      = f.submit "Save", class: "btn btn-primary"
+      = link_to "Cancel", export_templates_path, class: "btn"
+      - unless @template.new_record?
+        = link_to "Delete", exporter_path(id: @template.id), confirm: 'Are you sure?', method: :delete, class: "btn btn-danger"

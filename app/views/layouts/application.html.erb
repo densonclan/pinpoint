@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) + "- PinPoint" : "PinPoint" %></title>
+    <%= csrf_meta_tags %>
+    <%= javascript_include_tag "application" %>
+    <%= yield :javascripts %>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <%= stylesheet_link_tag "application", :media => "all" %>
+
+    <!-- For all other devices -->
+    <!-- Size should be 32 x 32 pixels -->
+    <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
+  </head>
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <% if user_signed_in? %>
+        <% if current_user.department.name == 'Nisa'
+              class_name = 'nisa-nav'
+            elsif current_user.department.name == 'Premier'
+              class_name = 'premier-nav'
+            else
+              class_name = 'gh-nav'
+            end
+        %>
+      <% end %>
+      <div class="navbar-inner <%= class_name %>">
+        <div class="container">
+          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="<%= root_path %>">
+            <% if user_signed_in? %>
+              <% if current_user.department.name == 'Nisa' || current_user.department.name == 'Costcutter' || current_user.department.name == 'Premier' %>
+                <%= image_tag "brand_#{current_user.department.name.downcase.gsub(/\s/, '_')}.png", :height => '40px' %>
+              <% else %>
+                <%= image_tag "brand_gh_2x.png", :height => '40px' %>
+              <% end %>
+            <% else %>
+              <%= image_tag "brand_gh_2x.png", :height => '40px' %>
+            <% end %>
+          </a>
+          <div class="container nav-collapse" style="height: auto;">
+            <% if user_signed_in? %>
+              <ul class="nav">
+                <li class="<%= active_class('dashboard') %>"><%= link_to raw("<i class=\"icon-dashboard\"></i> Dashboard"), root_path  %></li>
+                <li class="<%= active_class('stores') %>"><%= link_to raw('<i class="icon-home"></i> Stores'), stores_path %></li>
+                <li class="<%= active_class('orders') %>"><%= link_to raw('<i class=" icon-credit-card"></i> Orders'), orders_path %></li>
+                <li class="<%= active_class('tasks|messages|addresses') %> dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-bullhorn"></i> Connect
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to raw('Calendar'), calendar_tasks_path %></li>
+                    <li><%= link_to raw('Messages'), messages_path %></li>
+                    <li><%= link_to raw('Notes'), comments_path %></li>
+                    <li><%= link_to raw('Tasks'), tasks_path %></li>
+                    <% if current_user.internal? %>
+                      <li><%= link_to raw('Address Book'), addresses_path %></li>
+                    <% end %>
+                  </ul>
+                </li>
+                <li class="<%= active_class('reports') %>"><%= link_to raw('<i class="icon-signal"></i> Reports'), current_user.internal? ? clients_reports_path : reports_path %></li>
+
+                <li class="divider-vertical"></li>
+                  <li class="<%= active_class('clients|options|pages|logotypes|documents|periods|distributors|business_managers|importer|exporter|groups') %> dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-parent=".nav-collapse">
+                      Manage
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <% if current_user.internal? %>
+                        <li><%= link_to "Clients", clients_path %></li>
+                        <li><%= link_to "Options", options_path %></li>
+                        <li><%= link_to "Pages", pages_path %></li>
+                        <li><%= link_to "Documents", documents_path %></li>
+                        <li class="divider"></li>
+                     <% end %>
+
+                        <li><%= link_to "Folders", folders_path %></li>
+                        <li><%= link_to "Proof Of Delivery", pods_path %></li>
+                        <li><%= link_to "Periods", periods_path %></li>
+                    <% if current_user.internal? %>
+                        <li><%= link_to "Distributors", distributors_path %></li>
+                        <li><%= link_to "Business Managers", business_managers_path %></li>
+                        <li><%= link_to "Postcode Sectors", postcode_sectors_path %></li>
+                        <li class="divider"></li>
+
+                    <% end %>
+                        <li><%= link_to "Importer", importer_index_path %></li>
+                        <li><%= link_to "Exporter", exporter_index_path %></li>
+                        <li><%= link_to "Invoice", invoice_index_path %></li>
+                      <% if current_user.admin? %>
+                        <li><%= link_to "Bargain Booze", bargain_booze_index_path %></li>
+                        <li><%= link_to "Groups", departments_path %></li>
+                        <li><%= link_to "Users", users_path %></li>
+                      <% end %>
+                    </ul>
+                  </li>
+              </ul>
+
+              <ul class="nav pull-right">
+                <% if user_signed_in? %>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="text-success icon-adjust"></i>
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="disabled"><%= link_to "People online:", "#" %></li>
+                      <% if @online_users.blank? %>
+                        <li><%= link_to "Nobody online yet.", "#" %></li>
+                      <% else %>
+                        <% @online_users.each do |u| %>
+                          <li><%= link_to raw("<span class=\"text-success\">&#9679;</span> #{u.name}"), new_message_path(:user_id => u.id) %></li>
+                        <% end %>
+                      <% end %>
+                    </ul>
+                  </li>
+                <% end %>
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-user"></i> Account
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to "Edit Profile", edit_user_registration_path %></li>
+                    <li class="divider"></li>
+                    <li><%= link_to "Logout", destroy_user_session_path, :method => 'delete' %></li>
+                  </ul>
+                </li>
+              </ul>
+            <% end %>
+
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container main">
+        <div style="min-height: 365px">
+
+          <%= render 'layouts/messages' %>
+          <div>
+             <%= yield %>
+          </div>
+        </div>
+
+      <footer>
+        <p>&copy; 2013-2015 G&amp;H Sheet Fed Limited |  For support contact
+          <%= mail_to "pinpoint@gaskandhawley.com" do %>
+            <strong>pinpoint@gaskandhawley.com</strong>
+          <% end %> | Pinpoint v.3.0.0 Cloud Based
+          <%= image_tag "pinpoint_small.png", :class => "pull-right" %></p>
+
+      </footer>
+
+    </div>
+  </body>
+</html>

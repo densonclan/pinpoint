@@ -1,0 +1,16 @@
+.advanced-form.spaced{class: (show_advanced_filter? ? nil : 'hidden-el')}
+  = form_tag(advanced_stores_path, method: 'get', class: 'form-horizontal') do
+    = hidden_field_tag :type, params[:type]
+    .row
+      - if current_user.internal?
+        .span3
+          = label_tag :client
+          = select_tag :client, client_options, multiple: true
+      .span3
+        = label_tag :business_manager
+        = select_tag :business_manager, business_manager_options, multiple: true
+      .span3
+        = label_tag :county
+        = select_tag :county, english_county_options_for_select(params[:county]), multiple: true
+      .span3
+        = submit_tag "Filter", :class => 'btn btn-primary', :style => 'margin-top: 25px;'

@@ -1,0 +1,52 @@
+<% content_for :title do %>
+  New Client
+<% end %>
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li><%= link_to "Clients", clients_path %> <span class="divider">/</span></li>
+  <li class="active">New Client</li>
+</ul>
+
+<div class="page-header">
+  <h1>New Client</h1>
+</div>
+
+<%= render "shared/error_messages", :target => @client %>
+
+    <%= form_for @client, :url => { :action => 'create'}, :html => {:class => "form-horizontal" } do |f| %>
+      <fieldset>
+        <div class="control-group">
+          <%= f.label :name, :class => "control-label" %>
+          <div class="controls">
+            <%= f.text_field :name %>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <%= f.label :description, :class => "control-label" %>
+          <div class="controls">
+            <%= f.text_area :description, :rows => 3 %>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <%= f.label :code, :class => "control-label" %>
+          <div class="controls">
+            <%= f.text_field :code %>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <%= f.label :reference, :class => "control-label" %>
+          <div class="controls">
+            <%= f.text_field :reference %>
+          </div>
+        </div>
+
+        <hr>
+        <div class="pull-right">
+        <%= f.submit "Save", :class => "btn btn-primary" %>
+        <%=link_to "Cancel", clients_path, :class =>"btn" %>
+        </div>
+      </fieldset>
+    <% end %>

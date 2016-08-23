@@ -1,0 +1,47 @@
+- content_for :title do
+  = "Review period ##{@period.period_number}"
+= breadcrumbs [['Periods', periods_path], ["Review period ##{@period.period_number}"]]
+.page-header
+  %h1
+    = "Review Period #{@period.client.name} ##{@period.period_number}"
+    %small
+      - if @period_new.nil?
+        Cannot roll over without a new period
+      - else
+        (Prepare before rolling orders over)
+        = link_to "Compile", compile_period_path(@period), method: 'post', class: 'btn btn-info'
+
+.advanced-form.spaced#review-order-search-form
+  = form_tag(review_period_path(@period.id), method: :get, class: 'form-horizontal') do
+    .row
+      .span3
+        = label_tag :search
+        = text_field_tag :search, params[:search], class: 'typeahead-account'
+      .span3
+        = submit_tag "Search", :class => 'btn btn-primary', :style => "margin-top: 25px"
+
+
+.spaced.new-orders
+  %h3
+    = @period_new.nil? ? 'Orders for next period' : "Orders for Period ##{@period_new.period_number}"
+    %small= "(#{@orders.total_entries})"
+  #review-orders-table= render 'orders_table'
+
+.spaced.new-orders
+  %h3
+    Orders that will result in part box
+    %small= "(#{@orders_having_part_box.count})"
+  #review-orders-table= render partial: 'orders_table_without_pagination', locals: {orders: @orders_having_part_box}
+
+.spaced.new-orders
+  %h3
+    Orders with store not having logo
+    %small= "(#{@orders_without_logo.count})"
+  #review-orders-table= render partial: 'orders_table_without_pagination', locals: {orders: @orders_without_logo}
+
+
+.spaced.non-orders
+  %h3
+    Stores that will not have any orders
+    %small= "(#{@non_order_stores.total_entries})"
+  #review-stores-table= render 'stores_table'

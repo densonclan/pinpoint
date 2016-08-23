@@ -1,0 +1,80 @@
+= link_to 'Create folder', '#', {'class' => 'btn', 'data-toggle'=>'modal', 'data-target'=>'#createFolder'}
+
+.breadcrumb
+  - if @folder
+    = "» "
+    = link_to '/' , folders_path
+    - @folder.ancestors.reverse.each do |f|
+      = "» "
+      = link_to f.name, browse_folder_path(f)
+    = "» "
+    = @folder.name
+
+%table.table.table-bordered.table-hover.file-listing
+  %tr
+    %th File Name
+    %th Size
+    %th Modified
+    %th Actions
+  - @shared_folders.map(&:folder).compact.each do |folder|
+    %tr
+      %td
+        %i.icon-folder-open
+        = link_to folder.name, browse_folder_path(folder)
+      %td -
+      %td -
+      %td -
+  - @folders.each do |folder|
+    %tr
+      %td
+        %i.icon-folder-open
+        = link_to folder.name, browse_folder_path(folder)
+      %td -
+      %td -
+      %td
+        = link_to 'Share', '#', 'data-share-url' => folder_shared_folders_path(folder_id: folder.id), 'data-revoke-url' => folder_shared_folder_path(folder_id: folder.id, id: 10), 'data-name' => folder.name, 'class' => 'share-folder'
+        = link_to 'Remove', folder_path(id: folder.id), method: 'delete', confirm: 'Are you sure you want to delete this folder?'
+
+  - @files.each do |file|
+    %tr
+      %td
+        %i.icon-document
+        = link_to file.file_file_name, folder_uploaded_file_path(file.folder, file)
+      %td= file.file_file_size
+      %td= file.file_updated_at
+      %td
+        = link_to 'Download', folder_uploaded_file_path(file.folder, file)
+        = link_to 'Remove', folder_uploaded_file_url(folder_id: @folder, id: file.id), method: 'delete', confirm: 'Are you sure you want to delete this file?'
+
+
+- if @folder
+  = form_for [@folder, @folder.files.new], {multipart: true, html: {class: 'dropzone'}} do |f|
+    .fallback
+      = f.file_field :file
+
+
+#createFolder.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#myModalLabel.modal-title Create folder
+      .modal-body
+        = render partial: 'form', locals: {folder: (@folder ? @folder.children.new : Folder.new)}
+
+#shareModal.modal.fade{"aria-labelledby" => "shareModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#shareModalLabel.modal-title Share folder
+      .modal-body
+        %form#shareWithUsers
+          %select.select-users{multiple: 'multiple', placeholder: 'Share with user', 'style'=>"width: 100%"}
+            - User.where('id != ?', current_user.id).select([:id, :email]).each do |u|
+              %option{value: u.id}= u.email
+        
+      .modal-footer
+        %button.btn.btn-primary.save-button{:type => "button"} Save changes

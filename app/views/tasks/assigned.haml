@@ -1,0 +1,9 @@
+- content_for :title do
+  Assigned Tasks
+= breadcrumbs [['Assigned Tasks']]
+.page-header
+  %h1
+    Tasks you assigned
+    %small= "(#{@tasks.count})"
+= render 'menu'
+= render partial: 'table'

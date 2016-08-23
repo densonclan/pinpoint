@@ -1,0 +1,39 @@
+<div class="hero-unit home-unit">
+
+<div class="well" style="width: 220px;">
+  <%= image_tag "logotype_3.png", :class => "s-brand" %>
+
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => ""}) do |f| %>
+  <p>
+
+
+      <div class="control-group">
+        <%= f.label :email, :class => "control-label" %>
+        <div class="controls">
+        <%= f.email_field :email %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :password, :class => "control-label" %>
+        <div class="controls">
+        <%= f.password_field :password %>
+        </div>
+      </div>
+
+      <% if devise_mapping.rememberable? -%>
+        <div class="home-remember"><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+      <% end -%>
+
+      <div class="control-group">
+        <div class="controls"><%= f.submit "Sign in", :class => "btn btn-primary btn-large" %></div>
+      </div>
+
+
+  </p>
+  <p><%= render "devise/shared/links" %></p>
+
+    <% end %>
+
+    </div>
+</div>

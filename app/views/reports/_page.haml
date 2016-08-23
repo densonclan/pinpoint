@@ -1,0 +1,11 @@
+%dt= "Page #{page.name}"
+%dd
+  %p
+    %strong Orders
+    = @reporter.orders_for_page_count(page)
+  %p
+    %strong Boxes
+    = @reporter.orders_for_page_box_count(page)
+  %p
+    %strong Leaflets
+    = @reporter.orders_for_page_leaflet_count(page)

@@ -1,0 +1,57 @@
+- content_for :title do
+  Importer
+= breadcrumbs [['Importer']]
+.page-header
+  %h1
+    %span
+      %i.icon-circle-arrow-up.icon-2x
+    Importer
+- if !@result.blank?
+  .alert.alert-success
+    %a.close{"data-dismiss" => "alert"} ×
+    #flash_notice
+      = @result[:message]
+      - if !@transport.blank?
+        = link_to("Download a log file", file_importer_index_path(:id => @transport.id) )
+
+%ul.nav.nav-tabs
+  %li.active= link_to "Import data", importer_index_path
+  %li= link_to "History", history_importer_index_path
+
+= simple_form_for @transport, multipart: true do |f|
+  .row.spaced
+    .span4.templates
+      %legend
+        %i.icon-th-large
+        Get a template
+        %small (If you don't have one)
+      %span.help-block Templates are empty and only to be used to upload new stuff, for alterint exisiting data use Exporter.
+      %ul
+        %li= link_to 'Orders', template_importer_path('order', format: 'csv')
+        %li= link_to 'Stores', template_importer_path('store', format: 'csv')
+      %hr/
+      %ul
+        %li= link_to 'Address', template_importer_path('address', format: 'csv')
+        %li= link_to 'Business Managers', template_importer_path('business_manager', format: 'csv')
+        %li= link_to 'Clients', template_importer_path('client', format: 'csv')
+        %li= link_to 'Distributors', template_importer_path('distributor', format: 'csv')
+        %li= link_to 'Options', template_importer_path('option', format: 'csv')
+        %li= link_to 'Pages', template_importer_path('page', format: 'csv')
+        %li= link_to 'Periods', template_importer_path('period', format: 'csv')
+        %li= link_to 'Notes', template_importer_path('comment', format: 'csv')
+        %li= link_to 'Big Trev', template_importer_path('postcode_sector', format: 'csv')
+        %li= link_to 'POD', template_importer_path('proof_of_delivery', format: 'csv')
+    .span4
+      %legend
+        %i.icon-folder-open
+        Select a section to be imported
+      %span.help-block Select the type of spreadsheet you are importing. Keep in mind, any fields that do not match with the original template will be omitted.
+      = f.input_field :transport_type, collection: import_class_options
+    .span4
+      %legend
+        %i.icon-circle-arrow-down
+        Import file
+      %span.help-block Select a file to be imported. Only .csv and .xls types are allowed.
+      %p= f.input_field :spreadsheet
+      %hr/
+      = submit_tag "Import", :class => "btn btn-primary btn-large"

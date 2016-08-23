@@ -1,0 +1,8 @@
+<% if target.errors.any? %>
+  <% target.errors.full_messages.each do |msg| %>
+      <div class="alert alert-error">
+        <a class="close" data-dismiss="alert">&#215;</a>
+        <%= msg %>
+      </div>
+  <% end %>
+<% end %>

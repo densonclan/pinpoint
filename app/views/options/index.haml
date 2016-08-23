@@ -1,0 +1,35 @@
+= content_for :title do
+  Options
+= breadcrumbs [['Options']]
+.page-header
+  %h1
+    Options 
+    %small
+      = "(#{@options.count})"
+      = link_to "Add new", new_option_path
+%table.table.table-striped.table-hover
+  %tr
+    %th Name
+    %th Client
+    %th Reference no.
+    %th Description
+    %th Price Zone
+    %th Multibuy
+    %th Licenced
+    %th Total
+    %th Actions
+  - @options.each do |s|
+    %tr
+      %td= s.name
+      %td= s.client.name
+      %td= s.reference_number
+      %td= s.description
+      %td= s.price_zone
+      %td
+        - if s.multibuy
+          %i.icon-ok
+      %td
+        - if s.licenced
+          %i.icon-ok
+      %td= s.total_quantity
+      %td= link_to "Edit", edit_option_path(s)

@@ -1,0 +1,61 @@
+- content_for :title do
+  Reports
+- content_for :javascripts do
+  = javascript_include_tag reports_path(format: :js)
+
+= breadcrumbs [['Reports']]
+.page-header
+  %h1
+    Reports
+    %small= "Current Period: ##{current_period.period_number}"
+= render partial: 'menu'
+.row
+  .span6
+    #orders_chart.big-chart
+  .span6
+    %legend Overall statistics
+    .store-details
+      %p
+        %strong Total orders
+        = total_order_count
+      %p
+        %strong Total completed orders
+        = completed_order_count
+      %p
+        %strong Total leaflets
+        = total_leaflets_count
+      %hr/
+      %p
+        %strong Biggest order from
+        - if largest_order
+          = link_to largest_order.store.account_number, largest_order.store
+          = "(#{number_with_delimiter largest_order.total_quantity})"
+        - else
+          no orders yet
+      %p
+        %strong Smallest order from
+        - if smallest_order
+          = link_to smallest_order.store.account_number, smallest_order.store
+          = "(#{number_with_delimiter smallest_order.total_quantity})"
+        - else
+          no orders yet
+      %p
+        %strong Most orders from
+        - if store_with_most_orders
+          = link_to store_with_most_orders.account_number, store_with_most_orders
+          = "(#{number_with_delimiter store_with_most_orders.orders.length})"
+        - else
+          no orders yet
+    %legend Current Period statistics
+    .store-details
+      %p= "(#{current_period.name} - Dispatch by #{current_period.dispatch_date})"
+      %p
+        %strong Total Orders this Period
+        = number_with_delimiter(current_period.orders.count)
+      %p
+        %strong Total Orders completed
+        = number_with_delimiter(current_period.orders.completed.count)
+      %p
+        %strong Total leaflets
+        = number_with_delimiter(current_period.orders.count_leaflets)
+      %hr/

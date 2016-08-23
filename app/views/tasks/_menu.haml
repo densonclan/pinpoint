@@ -1,0 +1,7 @@
+%ul.nav.nav-tabs
+  %li{class: tasks_menu_class('index')}= link_to "Your tasks (#{current_user.assigned_tasks.unarchived.count})", tasks_path
+  %li{class: tasks_menu_class('assigned')}= link_to "You assigned (#{current_user.tasks.unarchived.count})", assigned_tasks_path
+  %li{class: tasks_menu_class('archived')}= link_to "Archived (#{current_user.assigned_tasks.archived.count})", archived_tasks_path
+  %li{class: tasks_menu_class('calendar')}= link_to "Calendar", calendar_tasks_path
+  - if current_user.write_access?
+    %li.pull-right= link_to "Add new task", new_task_path

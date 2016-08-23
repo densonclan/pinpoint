@@ -1,0 +1,39 @@
+- content_for :title do
+  Add a new address
+
+= breadcrumbs [['Address Book', addresses_path], ['Add a new address']]
+.page-header
+  %h1= new_address_title
+- if @store || @distribution
+  - if @store && !i_have_lock?(@store)
+    .alert.alert-warn You must obtain the store lock before setting the address
+    = link_to "Return to store #{@store.account_number}", edit_store_path(@store), class: 'btn'
+  - else
+    .address-option
+      %label{for: 'address_copy'} Copy existing address:
+      = radio_button_tag 'address', 'copy', true
+    .address-option
+      %label{for: 'address_new'} Add new address:
+      = radio_button_tag 'address', 'new'
+
+    = simple_form_for @address, html: {id: 'copy-address'} do |f|
+      - if @store
+        = f.input :store_id, as: :hidden
+      - else
+        = f.input :distribution_id, as: :hidden
+        = hidden_field_tag 'address[publisher]', 1 if params[:publisher]
+      %fieldset
+        = label_tag 'Copy existing address'
+        = text_field_tag :lookup_address, '', 'data-search-path' => address_lookup_path
+        = hidden_field_tag :existing_address
+        .existing-address
+      .pull-right
+        = f.submit "Save", class: "btn btn-primary"
+        - if @store
+          = link_to "Cancel", @store, class: "btn"
+        - elsif @distribution
+          = link_to "Cancel", @distribution.order, class: "btn"
+
+  #add-new-address= render partial: 'form'
+- else
+  = render partial: 'form'

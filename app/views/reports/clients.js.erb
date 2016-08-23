@@ -1,0 +1,12 @@
+$(document).ready(function(){
+  <% @clients.each do |c| %>
+    new PeriodsChart({
+      periods: <%= raw c.periods.ordered_among_all.pluck(:period_number).uniq %>,
+      series: [{
+        name: '<%= c.name %>',
+        data: <%= raw order_count_for_client(c) %>
+      }],
+      element: '<%= client_chart_div(c) %>'
+    });
+  <% end %>
+});

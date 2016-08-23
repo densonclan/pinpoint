@@ -1,0 +1,9 @@
+- content_for :title do
+  Modify export template
+= breadcrumbs [['Exporter', exporter_index_path], ['Templates', export_templates_path], ['Modify Template']]
+.page-header
+  %h1
+    %span
+      %i.icon-circle-arrow-up.icon-2x
+    Modify export template
+= render partial: 'form'

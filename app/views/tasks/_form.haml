@@ -1,0 +1,21 @@
+= render "shared/error_messages", :target => @task
+= simple_form_for @task, html: {class: 'task taskable'} do |f|
+  %fieldset
+    - if @task.new_record?
+      = f.input :account_number, label: 'Store Account Number', input_html: {class: 'typeahead-account'}
+    - else
+      .input
+        %label Store
+        = @task.store.account_number
+
+    = f.input :full_text, label: 'Description', as: :text
+    = f.input :due_date, as: :date_picker
+    = f.input :agent_id, label: 'Assign to a person', collection: accessible_users, prompt: 'Select a person', input_html: {id: 'agent-id'}
+    = f.input :department_id, label: "Assign to a department", collection: accessible_departments, prompt: 'Select a department', input_html: {id: 'department-id'}
+    = f.input :priority, collection: task_priority_options
+    %hr/
+    .pull-right
+      = f.submit "Save", :class => "btn btn-primary"
+      = link_to "Cancel", tasks_path, :class =>"btn"
+      - unless @task.new_record?
+        = link_to "Delete", @task, confirm: 'Are you sure you want to delete this task?', method: :delete, class: "btn btn-danger"

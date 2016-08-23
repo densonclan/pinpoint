@@ -1,0 +1,46 @@
+- content_for :title do
+  Dashboard
+- content_for :javascripts do
+  = javascript_include_tag dashboard_path
+= breadcrumbs
+.page-header
+  %h1
+    = image_tag current_user.avatar.url(:thumb), :style => 'width: 48px; height: 48px;'
+    Welcome #{current_user.name}.
+    %small
+      ( #{current_user.department.name} )
+.row
+  .span2
+    %ul.nav.nav-pills.nav-stacked
+      %li= link_to raw('<i class="icon-envelope"></i> Send a message'), new_message_path
+      %li= link_to raw('<i class="icon-tasks"></i> Show Calendar'), calendar_tasks_path
+      - if current_user.write_access?
+        %li= link_to raw('<i class="icon-home"></i> Add new store'), new_store_path
+      %li.divider
+        %hr/
+      - if current_user.write_access?
+        %li= link_to raw('<i class="icon-inbox"></i> Update Options'), update_status_orders_path
+      %li= link_to raw('<i class="icon-credit-card"></i> See current orders'), orders_path
+      %li= link_to raw('<i class="icon-bell"></i> See recent activity'), activity_reports_path(:type => 'orders')
+      %li
+        %hr/
+      - if current_user.internal?
+        %li= link_to raw('<i class="icon-circle-arrow-down"></i> Import data'), importer_index_path
+      %li= link_to raw('<i class="icon-circle-arrow-up"></i> Export data'), exporter_index_path
+  .span5
+    .spaced.store-lookup
+      %legend
+        %i.icon-home
+        Store look-up
+      %form.form-horizontal{:action => lookup_stores_path}
+        %fieldset
+          %label{:for => "account_number"} Account Number
+          %input#account_number.typeahead-account{:autocomplete => "off", "data-provide" => "typeahead", :name => "account_number", :type => "text"}/
+          %input.btn.btn-primary{:type => "submit", :value => "Show"}/
+    = render partial: 'to_do_list'
+    = render partial: 'my_tasks'
+    = render partial: 'messages'
+  .span5
+    = render partial: 'periods'
+    .spaced
+      #sliced_container{:style => "width:  400px; height: 250px;"}

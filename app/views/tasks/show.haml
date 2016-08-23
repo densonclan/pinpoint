@@ -1,0 +1,47 @@
+- content_for :title do
+  Show Task
+= breadcrumbs [['Tasks', tasks_path], ['Show Task']]
+.page-header
+  %h1 Show Task
+.row.spaced.store-details
+  %span.span4
+    %legend Task Details
+    %p
+      %strong Store
+      = @task.store ? @task.store.account_number : 'none'
+    %p
+      %strong Assigned by:
+      = @task.user ? @task.user.name : '-'
+    %p
+      %strong Assigned at:
+      = @task.created_at.strftime('%d %B at %H:%M')
+    %p
+      %strong Due date:
+      = @task.due_date.strftime('%d %B')
+    %p
+      %strong Priority:
+      = priorityText @task.priority
+    %hr/
+    %p
+      Precentage completed: (#{@task.completion}%)
+    .progress
+      .bar{style: "width: #{@task.completion}%;"}
+  %span.span5
+    %legend Instructions
+    = @task.full_text
+  - if current_user.write_access?
+    %span.span3
+      %legend Actions
+      - if @task.agent == current_user
+        %div
+          = form_for @task, :url => { :action => 'update'}, :html => {:class => "form-horizontal" } do |f|
+            %p
+              = f.label :completion, "How completed is the task"
+              = f.select :completion, options_for_select((0..100).step(10).to_a, :selected => @task.completion)
+            = f.submit "Save", :class => "btn btn-primary"
+      .actionns
+        %p= link_to raw('<i class="icon-envelope"></i> Send message'), new_message_path(:user_id => @task.agent_id), :class => 'btn'
+        %p
+          = link_to "Archive", archive_task_path(@task), :class => 'btn btn-info', :method => 'PUT'
+          = link_to "Edit", edit_task_path(@task), :class => 'btn'
+          = link_to "Delete", @task, :confirm => 'Are you sure you want to delete this task?', :method => :delete, :class =>"btn btn-danger"

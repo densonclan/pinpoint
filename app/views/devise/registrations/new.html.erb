@@ -1,0 +1,67 @@
+<% content_for :title do %>
+  Sign up to Pinpoint
+<% end %>
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li class="active">Sign up to Pinpoint</li>
+</ul>
+
+<div class="page-header">
+  <h1>Sign up to Pinpoint</h1>
+</div>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :class => "form-horizontal" })  do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="control-group">
+    <%= f.label :name, :class => "control-label" %>
+    <div class="controls">
+    <%= f.text_field :name %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :department, :class => "control-label" %>
+    <div class="controls">
+    <%= f.select :department_id, options_for_select(Department.where('name = ?','Pending').all.map{|c| [c.name, c.id]}) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :email, :class => "control-label" %>
+    <div class="controls">
+    <%= f.email_field :email %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :phone, :class => "control-label" %>
+    <div class="controls">
+    <%= f.text_field :phone %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :password, :class => "control-label" %>
+    <div class="controls">
+    <%= f.password_field :password, :autocomplete => "off" %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :password_confirmation, :class => "control-label" %>
+    <div class="controls">
+    <%= f.password_field :password_confirmation %>
+    </div>
+  </div>
+
+
+  <div class="control-group">
+    <div class="controls">
+    <%= f.submit "Sign up", :class => "btn btn-primary" %>
+    </div>
+  </div>
+
+<% end %>
+
+<%= render "devise/shared/links" %>

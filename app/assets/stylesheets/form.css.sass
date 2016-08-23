@@ -1,0 +1,66 @@
+form.simple_form
+  .input
+    clear: both
+    padding: 5px 0
+  label
+    float: left
+    width: 160px
+    text-align: right
+    padding: 5px 20px 0 0 
+  .field_with_errors
+    input, select
+      background-color: #f2dede
+      border-color: red
+  textarea
+    height: 60px
+    width: 250px
+  input.string, select
+    width: 250px
+  span.hint
+    display: block
+    margin: 5px 0 0 180px
+    font-style: italic
+  span.error
+    font-weight: bold
+    color: red
+    margin-left: 5px
+  abbr
+    display: none
+
+form.simple_form.form-horizontal
+  input.boolean
+    margin: 0 5px 0 0
+  label
+    float: none
+    width: auto
+    text-align: left
+    padding: 0
+    &.boolean
+      display: inline
+
+
+.record-lock
+  float: right
+  width: 16px
+  height: 16px
+  text-indent: -99999px
+  background: transparent image-url('lock_delete.png') no-repeat top left
+
+.not-locked-alert
+  display: none
+
+form.no-lock
+  .btn-primary, .btn-danger
+    display: none
+  .record-lock
+    background: transparent image-url('lock.png') no-repeat top left
+  .not-locked-alert
+    display: block
+
+.option.checkbox
+  input
+    float: left
+
+
+#running_order_options
+  margin-bottom: 15px

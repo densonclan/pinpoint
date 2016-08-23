@@ -1,0 +1,22 @@
+.spaced
+  %legend
+    %i.icon-ok
+    To-do list
+    %small= link_to 'View more', tasks_path, :class=> 'pull-right'
+  - if dashboard_assigned_tasks.empty?
+    %p.spaced.muted There have been no tasks assigned to you.
+  - else
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th{:width => "20%"} Due Date
+          %th{:width => "10%"} Account Number
+          %th{:width => "70%"} Task
+          %th{:width => "10%"} Priority
+      %tbody
+        - dashboard_assigned_tasks.each do |t|
+          %tr{:class => due_date_class(t)}
+            %td= t.due_date.strftime('%d %b')
+            %td= t.store ? t.store.account_number : '-' 
+            %td{:style => "width: 35%"}= link_to truncate(t.full_text, :length => 80), t
+            %td= priorityText(t.priority)

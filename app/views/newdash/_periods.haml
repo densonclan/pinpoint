@@ -1,0 +1,59 @@
+.spaced-out
+  %legend
+    %i.icon-time
+    = current_user.internal? ? "Current Periods" : "Current Period"
+  - current_periods.each do |period|
+    %div
+      %h4= period.client.name
+      .store-details
+        %p
+          %strong Current Period
+          = "##{period.period_number}"
+        %p
+          %strong Promotion date
+          - if period.date_promo
+            = period.date_promo.strftime('%d %B %Y')
+            %span.muted
+              (#{distance_of_time_in_words_to_now period.date_promo} #{period.date_promo.end_of_day.past? ? 'ago' : 'from now'})
+          - else
+            %span.muted Date not set
+        %p
+          %strong Promotion date ends
+          - if period.date_promo_end
+            = period.date_promo_end.strftime('%d %B %Y')
+            %span.muted
+              (#{distance_of_time_in_words_to_now period.date_promo_end} #{period.date_promo_end.end_of_day.past? ? 'ago' : 'from now'})
+          - else
+            %span.muted Date not set
+        %p
+          %strong Samples date
+          - if period.date_samples
+            = period.date_samples.strftime('%d %B %Y')
+            %span.muted
+              (#{distance_of_time_in_words_to_now period.date_samples} #{period.date_samples.end_of_day.past? ? 'ago' : 'from now'})
+          - else
+            %span.muted Date not set
+        %p
+          %strong Approval date
+          - if period.date_approval
+            = period.date_approval.strftime('%d %B %Y')
+            %span.muted
+              (#{distance_of_time_in_words_to_now period.date_approval} #{period.date_approval.end_of_day.past? ? 'ago' : 'from now'})
+          - else
+            %span.muted Date not set
+        %p
+          %strong Print date
+          - if period.date_print
+            = period.date_print.strftime('%d %B %Y')
+            %span.muted
+              (#{distance_of_time_in_words_to_now period.date_print} #{period.date_print.end_of_day.past? ? 'ago' : 'from now'})
+          - else
+            %span.muted Date not set
+        %p
+          %strong Dispatch date
+          - if period.date_dispatch
+            = period.date_dispatch.strftime('%d %B %Y')
+            %span.muted
+              (#{distance_of_time_in_words_to_now period.date_dispatch} #{period.date_dispatch.end_of_day.past? ? 'ago' : 'from now'})
+          - else
+            %span.muted Date not set

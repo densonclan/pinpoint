@@ -1,0 +1,42 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Store</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Type</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @documents.blank? %>
+      <tr>
+        <td colspan="4">No documents yet.
+          <% if can? :create, Document %>
+            <%= link_to "Add one!", new_document_path %>
+          <% end %>
+        </td>
+      </tr>
+    <% else %>
+      <% @documents.each do |d| %>
+      <tr>
+        <td><%= d.store ? link_to(d.store.account_number, store_path(:id => d.store.id ) ) : '-' %></td>
+        <td><%= d.title %></td>
+        <td><%= d.description %></td>
+        <td><%= d.document_type %></td>
+        <td>
+          <% if can? :update, d %>
+            <%= link_to "Edit", edit_document_path( :id => d.id ) %>
+          <% end %>
+
+          <% if can? :read, d %>
+            <%= link_to "View file", d.file.url %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @documents %>

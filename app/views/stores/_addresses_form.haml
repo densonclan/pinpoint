@@ -1,0 +1,21 @@
+%hr/
+.row.spaced.bottom-border
+  .span3
+    = a.input :address_type, as: :hidden
+    = a.input :title, collection: person_title_options
+    = a.input :full_name
+    = a.input :business_name
+  .span3
+    = a.input :first_line
+    = a.input :second_line
+    = a.input :third_line
+  .span3
+    = a.input :postcode
+    = a.input :city
+    %div
+      = a.label :county
+      = a.english_county_select :county
+  .span3
+    = a.input :phone_number
+    = a.input :mobile
+    = a.input :email

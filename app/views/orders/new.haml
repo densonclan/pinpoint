@@ -1,0 +1,8 @@
+= content_for :title do
+  New Order
+= breadcrumbs [['Orders', orders_path], ['New Order']]
+.page-header
+  %h1 New Order
+- unless @order.new_record?
+  = render partial: 'menu'
+= render partial: 'form'

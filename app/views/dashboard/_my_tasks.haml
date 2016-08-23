@@ -1,0 +1,22 @@
+.spaced
+  %legend
+    %i.icon-flag
+    Tasks you've assigned
+    %small= link_to 'View more', assigned_tasks_path, :class=> 'pull-right'
+  - if my_dashboard_tasks.empty?
+    %p.muted.spaced No tasks here.
+  - else
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th{:width => "25%"} Due Date
+          %th{:width => "10%"} Account Number
+          %th{:width => "60%"} Task
+          %th{:width => "15%"} Completion
+      %tbody
+        - my_dashboard_tasks.each do |t|
+          %tr{:class => due_date_class(t)}
+            %td= t.due_date.strftime('%d %B')
+            %td= t.store ? t.store.account_number : '-' 
+            %td{:style => "width: 35%"}= link_to truncate(t.full_text, :length => 80), t
+            %td= percentagePill(t.completion)

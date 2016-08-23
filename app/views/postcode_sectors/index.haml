@@ -1,0 +1,11 @@
+- content_for :title do
+  Postcode Sectors
+
+= breadcrumbs [['Postcode Sectors']]
+.page-header
+  %h1
+    Postcode Sectors
+    %small= "(#{@sectors.total_entries})"
+
+= render 'table'
+= will_paginate @sectors, renderer: BootstrapPagination::Rails

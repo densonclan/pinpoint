@@ -1,0 +1,5 @@
+%ul.nav.nav-tabs
+  %li{class: exporter_menu_class('exporter')}= link_to "Export data", exporter_index_path
+  %li{class: exporter_menu_class('export_templates')}= link_to "Templates", export_templates_path
+  %li.pull-right
+    %p= link_to "Add new template", new_export_template_path, :class => 'btn btn-info'

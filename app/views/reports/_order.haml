@@ -1,0 +1,9 @@
+%tr
+  %td= link_to order.id, order
+  %td= order.store.client.name
+  %td= link_to order.store.account_number, order.store
+  %td.n= order.updated_at.strftime('%d %b at %H:%M')
+  %td= order.updated_by ? order.updated_by.name : '-'  
+  - if order.versions.last
+    %td= order.versions.last.event
+    %td= object_changes(order)

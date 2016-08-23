@@ -1,0 +1,7 @@
+= form_for folder do |f|
+  = f.hidden_field :parent_id
+  %p
+    = f.label :name
+    = f.text_field :name
+  %p
+    = f.submit "Create Folder", {'class' => 'btn'}

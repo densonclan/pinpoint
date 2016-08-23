@@ -1,0 +1,25 @@
+<% content_for :title do %>
+  Other stores for <%= @store.account_number %>
+<% end %>
+
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li class="active">Other stores for <%= @store.account_number %></li>
+</ul>
+
+<div class="page-header">
+  <h1>Other stores for <%= @store.account_number %>
+    <small>(<%= @stores.count %>)
+      <% if can? :create, Store %>
+        <%= link_to "Add new", new_store_path %>
+      <% end %>
+    </small>
+    <%= form_tag( {:action => "search"}, :method => 'get', :class => "form-searh pull-right" ) do %>
+      <%= text_field_tag :query, params[:query], { :class => "input-medium search-query", :placeholder => "e.g. account no" } %>
+      <button type="submit" class="btn">Search</button>
+    <% end %>
+  </h1>
+</div>
+
+<%= render partial: 'menu' %>
+<%= render :partial => 'table', :orders => @orders %>

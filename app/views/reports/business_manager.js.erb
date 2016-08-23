@@ -1,0 +1,10 @@
+$(document).ready(function(){
+  new PeriodsChart({
+    periods: <%= raw Period.where(client_id: @business_manager.client_id).ordered_among_all.pluck(:period_number).uniq %>,
+    series: [{
+      name: '<%= @business_manager.name %>',
+      data: <%= raw order_count_for_business_manager %>
+    }],
+    element: 'orders_chart'
+  });
+});

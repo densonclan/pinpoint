@@ -1,0 +1,32 @@
+- content_for :title do
+  Stores Reports
+= breadcrumbs [['Reports', reports_path], ['Stores']]
+= render partial: 'menu'
+.row
+  .span4.offset4
+    = form_tag store_reports_path, method: :get do
+      = label_tag :account_number, "Enter an account number"
+      = text_field_tag :account_number, params[:account_number],  :class => "typeahead-account", :data => { :provide => "typeahead" }, :autocomplete => "off"
+      %div= submit_tag "Show", :class => 'btn btn-primary', :style => 'margin-top: 0'
+
+
+- if @stores
+  %h3= "Results for #{params[:account_number]}"
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th #
+        %th Client
+        %th Account Number
+        %th Owner's name
+        %th Postcode
+        %th Actions
+    %tbody
+      - @stores.each do |o|
+        %tr
+          %td= o.id
+          %td= o.client.name
+          %td= link_to o.account_number, o
+          %td= o.owner_name
+          %td= o.postcode
+          %td= link_to "Show Reports", store_reports_path(account_number: o.account_number)

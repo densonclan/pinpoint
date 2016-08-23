@@ -1,0 +1,29 @@
+= render "shared/error_messages", :target => @period
+= simple_form_for @period, :html => {:class => "form-horizontal" } do |f|
+  %fieldset
+    .row
+      .span3= f.input :client_id, collection: clients
+      .span3= f.input :period_number
+      .span3= f.input :year
+      .span3= f.input :week_number
+      .span3= f.input :current, label: 'Current?', as: :boolean, hint: 'Note: Any other period that is checked current will be disabled', boolean_style: :nested
+    .dates
+      %h4 Important Dates
+      %hr/
+
+      .row.spaced
+        .span3
+          = f.input :date_print,      as: :date_picker
+          = f.input :date_dispatch,   as: :date_picker
+        .span3
+          = f.input :date_samples,    as: :date_picker
+          = f.input :date_approval,   as: :date_picker
+        .span3
+          = f.input :date_promo,      as: :date_picker
+          = f.input :date_promo_end,  as: :date_picker
+      %hr/
+    .pull-right
+      = f.submit "Save", :class => "btn btn-primary"
+      = link_to "Cancel", periods_path, :class =>"btn"
+      - unless @period.new_record?
+        = link_to "Delete", period_path(:id => @period.id), :confirm => 'Are you sure you want to delete it?', :method => :delete, :class =>"btn btn-danger"

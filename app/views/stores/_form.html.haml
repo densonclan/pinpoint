@@ -1,0 +1,40 @@
+= render "shared/error_messages", :target => @store
+= simple_form_for @store, html: {id: 'store-form', class: "form-horizontal #{form_lock_class(@store)}"} do |f|
+  %fieldset
+    %legend
+      Basic details
+      = render partial: 'shared/lock', locals: {object: @store}
+    .row.spaced
+      .span3
+        - if @current_user.internal?
+          = f.input :client_id, collection: Client.ordered
+        = f.input :account_number
+      .span3
+        = f.input :reference_number
+        = f.input :logo
+      .span3
+        = f.input :description
+        = f.input :store_urgent
+        = f.input :participation_only
+        = f.input :personalised_address_panel
+        = f.input :personalised_panel_1
+        = f.input :personalised_panel_2
+        = f.input :personalised_panel_3
+      .span3
+        = f.input :business_manager_id, collection: business_managers
+        = f.input :preferred_distribution, collection: preferred_distribution_options
+        = f.input :preferred_option_id, collection: options_for_store(@store)
+    - if @store.persisted?
+      #addresses.spaced
+        %h3 Address
+        - if @store.address
+          = f.fields_for :address do |a|
+            = render partial: 'addresses_form', locals: {a: a}
+        - else 
+          = link_to 'Add Address', new_address_path(store_id: @store.id), class: 'btn btn-primary'
+    %hr/
+    .pull-right
+      = f.submit "Save", :class => "btn btn-primary save-button"
+      = link_to "Cancel", stores_path, :class =>"btn"
+      - unless @store.new_record?
+        = link_to 'Delete', @store, method: :delete, class: 'btn btn-danger delete-button'

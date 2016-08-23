@@ -1,0 +1,42 @@
+- content_for :title do
+  Reports
+- content_for :javascripts do
+  = javascript_include_tag business_managers_reports_path(format: :js)
+= breadcrumbs [['Reports', reports_path], ['Business Managers']]
+.page-header
+  %h1
+    Reports
+    %small Business Managers
+= render 'menu'
+.row
+  .span6
+    #orders_chart.really-big-chart
+  .span6
+    .spaced
+      = form_tag '/reports/business_manager', :method => 'get' do
+        = label_tag :manager, "Select a Business Manager"
+        %br/
+        = select_tag :manager, business_manager_options, prompt: 'All'
+        %div= submit_tag "Show", :class => 'btn btn-primary', :style => 'margin-top: 0'
+    %legend Number of orders
+    .store-details
+      %p
+        %strong Total orders
+        = total_order_count
+      %p
+        %strong Total completed orders
+        = completed_order_count
+      %p
+        %strong Total leaflets
+        = total_leaflets_count
+      %hr/
+      - if largest_order
+        %p
+          %strong Biggest order from
+          = link_to largest_order.store.business_manager.name, largest_order.store
+          = "(#{largest_order.store.account_number} - Quantity: #{number_with_delimiter largest_order.total_quantity})"
+      - if smallest_order
+        %p
+          %strong Smallest order from
+          = link_to smallest_order.store.business_manager.name, smallest_order.store
+          = "(#{smallest_order.store.account_number} - Quantity: #{number_with_delimiter smallest_order.total_quantity})"

@@ -1,0 +1,3 @@
+= render partial: 'orders_table_without_pagination', locals: {orders: @orders}
+
+= will_paginate @orders, renderer: BootstrapPagination::Rails

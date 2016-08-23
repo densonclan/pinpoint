@@ -1,0 +1,9 @@
+source 'http://rubygems.org'
+
+gem 'capistrano'
+gem 'capistrano-rails'
+gem 'capistrano-scm-copy'
+gem 'capistrano-rbenv', '~> 2.0'
+gem 'capistrano-passenger'
+gem 'net-ssh'
+gem 'whenever'

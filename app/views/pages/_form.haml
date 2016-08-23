@@ -1,0 +1,11 @@
+= render "shared/error_messages", target: @page
+= simple_form_for @page do |f|
+  %fieldset
+    = f.input :name
+    = f.input :reference_number
+    = f.input :box_quantity
+    = f.input :description
+    %hr
+    .pull-right
+      = f.submit "Save", class: "btn btn-primary"
+      = link_to "Cancel", pages_path, class: "btn"

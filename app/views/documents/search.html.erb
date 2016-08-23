@@ -1,0 +1,19 @@
+<% content_for :title do %>
+  Search results for: <%= params[:query] %>
+<% end %>
+
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li class="active">Search results for: <%= params[:query] %></li>
+</ul>
+
+<div class="page-header">
+  <h1>Search results for: <%= params[:query] %> <small>(<%= @documents.count %>)</small>
+    <%= form_tag( {:action => "search"}, :method => 'get', :class => "form-searh pull-right" ) do %>
+      <%= text_field_tag :query, params[:query], { :class => "input-medium search-query", :placeholder => "e.g. account no" } %>
+      <button type="submit" class="btn">Search</button>
+    <% end %>
+  </h1>
+</div>
+
+<%= render :partial => 'table', :documents => @documents %>

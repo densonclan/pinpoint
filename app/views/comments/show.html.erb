@@ -1,0 +1,19 @@
+<% content_for :title do %>
+  Comment details
+<% end %>
+<%= breadcrumbs [['Comments', comments_path], ['Comment']] %>
+<div class="page-header">
+  <h1>Comment details</h1>
+</div>
+
+<div class="row">
+  <div class="span4">
+    <div class="store-details">
+      <p><strong>Created by</strong><%= @comment.user.name %></p>
+      <p><strong>Created at</strong><%= @comment.created_at.strftime('%d %B %Y') %></p>
+    </div>
+  </div>
+  <div class="span8">
+    <%= simple_format h(@comment.full_text) %>
+  </div>
+</div>

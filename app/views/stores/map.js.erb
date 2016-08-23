@@ -1,0 +1,86 @@
+$(document).ready(function($){
+
+  /**
+   * Setup maps
+   * @type {GMaps}
+   */
+  map = new GMaps({
+    div: '#map',
+    lat: 53.477933,
+    lng: -2.232478,
+    mapTypeId: 'satellite',
+  });
+
+  roadMap = new GMaps({
+    div: '#road',
+    lat: 53.477933,
+    lng: -2.232478,
+  });
+
+  GMaps.geocode({
+    address: $('.address').text(),
+    callback: function(results, status) {
+
+      if (status == 'OK') {
+        /**
+         * Create options for marker and circle
+         * @type {[type]}
+         */
+        var latlng = results[0].geometry.location;
+        var currentLat = latlng.lat();
+        var currentLng = latlng.lng();
+
+        var rad = <%= params[:radius] ||= 1 %>
+        rad *= 1600;
+
+        var circleOptions = {
+            lat: currentLat,
+            lng: currentLng,
+            radius: rad,
+            fillColor: 'rgb(80,202,251)',
+            strokeColor: 'rgb(80,202,251)',
+            fillOpacity: 0.1,
+            strokeOpacity: 1
+        };
+
+        var markerOptions = {
+          lat: currentLat,
+          lng: currentLng,
+        };
+
+        /**
+         * Center maps and set markers up
+         */
+        map.setCenter(latlng.lat(), latlng.lng());
+        map.addMarker(markerOptions);
+
+        map.drawCircle(circleOptions);
+
+        roadMap.setCenter(currentLat, currentLng);
+        roadMap.addMarker({position: latlng});
+
+        roadMap.drawCircle(circleOptions);
+
+        /**
+         * Set up Street View
+         */
+
+        pano = GMaps.createPanorama({
+          el: '#pano',
+          lat: currentLat,
+          lng: currentLng,
+        });
+
+      }
+    }
+  });
+
+  $('.change-radius').on('click',function(event){
+    event.preventDefault();
+    var rad = parseFloat($('#radius').val());
+    console.log('New radius: '+rad);
+        rad *= 1600;
+    map.polygons[0].setOptions({radius: rad});
+    roadMap.polygons[0].setOptions({radius: rad});
+  });
+});

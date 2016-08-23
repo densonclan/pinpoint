@@ -1,0 +1,12 @@
+%ul.nav.nav-tabs
+  - if current_user.internal?
+    %li{class: report_menu_class(:clients)}= link_to "Clients", clients_reports_path
+  - else
+    %li{class: report_menu_class(:index)}= link_to 'Distribution Periods', reports_path
+  %li{class: report_menu_class(:business_managers)}= link_to "Business Managers", business_managers_reports_path
+  %li{class: report_menu_class(:quantities)}= link_to "Quantities", quantities_reports_path
+  %li{class: report_menu_class(:stores)}= link_to "Stores", stores_reports_path
+  - if current_user.internal?
+    %li{class: report_menu_class(:activity)}= link_to "Recent Activity", activity_reports_path(:type => 'orders')
+  - if report_store_menu?
+    %li.pull-right= link_to "View Store", @store

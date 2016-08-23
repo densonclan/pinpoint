@@ -1,0 +1,27 @@
+<% content_for :title do %>
+  Tasks for <%= @store.account_number %>
+<% end %>
+
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li><%= link_to "Stores", stores_path %><span class="divider">/</span></li>
+  <li><%= link_to "Store no. #{@store.account_number}", store_path(:id => @store.id) %><span class="divider">/</span></li>
+  <li class="active">Tasks for <%= @store.account_number %></li>
+</ul>
+
+<div class="page-header">
+  <h1>Tasks for <%= @store.account_number %> <small>(<%= @tasks.count %>) <%= link_to "Add new", new_task_path(:account_number => @store.account_number) %></small>
+  </h1>
+</div>
+
+<ul class="nav nav-tabs">
+  <li><%= link_to "Store details", store_path(:id => @store.id) %></li>
+  <li><a href="<%= other_stores_path(:id => @store.id) %>">Other stores (<%= (@store.other_stores.count.to_i - 1) %>)</a></li>
+  <li><a href="<%= store_orders_path(:id => @store.id) %>">Orders history (<%= @store.orders.count %>)</a></li>
+  <li><a href="<%= store_comments_path(:id => @store.id) %>">Notes (<%= @store.comments.count %>)</a></li>
+  <li><a href="<%= documents_stores_path(:id => @store.id) %>">Documents (<%= @store.documents.count %>)</a></li>
+  <li class="active"><a href="<%= store_tasks_path(:id => @store.id) %>">Tasks (<%= @tasks.count %>)</a></li>
+  <li><a href="<%= map_stores_path(:id => @store.id) %>">Maps</a></li>
+  <li class="pull-right"><%= link_to "Edit Store", edit_store_path(:id => @store.id) %></li>
+</ul>
+<%= render partial: 'table' %>

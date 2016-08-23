@@ -1,0 +1,22 @@
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th #
+      %th= sortable 'account_number', 'Account Number'
+      %th= sortable 'owner_name', "Owner's name"
+      %th Actions
+  %tbody
+    - if @non_order_stores.empty?
+      %tr
+        %td{colspan: 4} No Stores found.
+    - else
+      - @non_order_stores.each do |store|
+        %tr
+          %td= store.id
+          %td= link_to store.account_number, store
+          %td= store.owner_name
+          %td
+            = link_to "Details", store
+            = link_to "Edit", edit_store_path(store)
+
+= will_paginate @non_order_stores, renderer: BootstrapPagination::Rails, param_name: 'store_page'

@@ -1,0 +1,8 @@
+- unless object.new_record?
+  - if object.lock
+    - if object.lock.user == current_user
+      = link_to 'Release', object.lock, title: "Record locked by you. Click to release lock", class: 'record-lock'
+    - else
+      = image_tag 'lock.png', title: "Record locked by #{object.lock.user.name}", class: 'record-lock locked', 'data-locked-by' => object.lock.user.name
+  - else
+    = link_to 'Lock', record_locks_path(record_lock: {record_id: object.id, record_type: object.class.name}), title: "Click to lock record", class: 'record-lock'

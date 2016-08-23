@@ -1,0 +1,36 @@
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Type
+      %th Business Name
+      %th Full Name
+      %th First Line
+      %th Second Line
+      %th City
+      %th County
+      %th Postcode
+      %th Actions
+  %tbody
+    - if @addresses.blank?
+      %tr
+        %td{:colspan => "8"}
+          There are no addresses yet.
+          - if can? :create, Address
+            = link_to "Add one!", new_address_path
+    - else
+      - @addresses.each do |s|
+        %tr
+          %td= s.address_type.titleize
+          %td= s.business_name
+          %td= s.full_name
+          %td= s.first_line
+          %td= s.second_line
+          %td= s.city
+          %td= s.county
+          %td= s.postcode
+          %td
+            - if current_user.internal?
+              = link_to "Edit", edit_address_path(s)
+              = link_to "Delete", s, :class => 'text-error', :method => 'delete', :confirm => 'Are you sure you want to delete this item?'
+
+= will_paginate @addresses, :renderer => BootstrapPagination::Rails

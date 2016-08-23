@@ -1,0 +1,29 @@
+- content_for :title do
+  Business Managers
+= breadcrumbs search_page? ? [['Business Managers', business_managers_path], ['Search Results']] : [['Business Managers']]
+.page-header
+  = render partial: 'shared/search_form'
+  %h1
+    = search_page? ? "Search results for #{params[:query]}" : 'Business Managers'
+    %small
+      = "(#{@managers.count})"
+      = link_to "Add new", new_business_manager_path
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Client
+      %th Name
+      %th Email
+      %th Phone number
+      %th Stores
+      %th.actions-col Actions
+  %tbody
+    - @managers.each do |m|
+      %tr
+        %td= m.client ? m.client.name : '-'
+        %td= m.name
+        %td= m.email
+        %td= m.phone_number
+        %td= link_to m.stores.length, advanced_stores_path(:client => '', :address => {:county => ''}, :business_manager => m.id)
+        %td.actions-col= link_to "Edit", edit_business_manager_path(m)
+= will_paginate @managers, :renderer => BootstrapPagination::Rails

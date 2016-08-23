@@ -1,0 +1,52 @@
+- content_for :title do
+  Store #{@reporter.store.account_number} Reports
+= breadcrumbs [['Reports', reports_path], ['Stores', stores_reports_path], ["Store: #{@reporter.store.account_number}"]]
+.page-header
+  %h1= "Store #{@reporter.store.account_number}"
+= render partial: 'menu'
+.row.spaced
+  .span3{:style => "text-align: center"}
+    %h4= "Last order in period ##{@reporter.last_order_period}"
+  .span3{:style => "text-align: center"}
+    %h4
+      = @reporter.orders_per_period
+      orders per period
+      %small (Average)
+  .span3{:style => "text-align: center"}
+    %h4
+      = @reporter.orders_average_total
+      leaflets per order
+      %small (Average)
+  .span3{:style => "text-align: center"}
+    %h4
+      = @reporter.orders_average_boxes
+      boxes per order
+      %small (Average)
+.row
+  .span3
+    %legend Filter results
+    = form_tag store_reports_path, method: :get do
+      = hidden_field_tag :account_number, @reporter.store.account_number
+      %p
+        = label_tag :order_option, raw('<i class="icon-tags"></i> Option')
+        = select_tag :order_option, options_for_client_options(@reporter.store.client), multiple: true
+      %p
+        = label_tag :order_distributor, raw('<i class=" icon-shopping-cart"></i> Distributor')
+        = select_tag :order_distributor, distributor_options, multiple: true
+      %p
+        = label_tag :order_period, raw('<i class="icon-time"></i> Distribution Period')
+        = select_tag :order_period, periods_for_client_options(@reporter.store.client), multiple: true
+      %p{:style => "margin-top: 25px"}
+        = submit_tag "Filter", :class => 'btn btn-primary'
+        = link_to "Show Orders (#{@reporter.orders_count})", orders_store_path(@reporter.store), :class => 'btn btn-info'
+  .span3
+    %h3 Overall
+    = render partial: 'order_stats'
+  .span3
+    %h3 Options
+    %dl.spaced.bold-definition= render partial: 'option', collection: @reporter.options_with_orders
+  .span3
+    %h3 Distributor
+    %dl.spaced.bold-definition= render partial: 'distributor', collection: @reporter.distributors_with_orders
+    %h3 Page
+    %dl.spaced.bold-definition= render partial: 'page', collection: @reporter.pages_with_counts

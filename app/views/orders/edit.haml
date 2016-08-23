@@ -1,0 +1,7 @@
+= content_for :title do
+  Edit Order
+= breadcrumbs [['Orders', orders_path], ["Order no. ##{@order.id}", @order], ['Edit Order']]
+.page-header
+  %h1 Edit Order
+= render partial: 'menu'
+= render partial: 'form'

@@ -1,0 +1,15 @@
+- content_for :title do
+  Address Book
+
+= breadcrumbs search_page? ? [['Address Book', addresses_path], ["Search Results for #{params[:query]}"]] : [['Address Book']]
+
+.page-header
+  = render 'shared/search_form'
+  %h1
+    Address Book
+    %small
+      = "(#{@addresses.count})"
+      = link_to "Add new", new_address_path
+      
+= render partial: 'advanced', addresses: @addresses
+= render partial: 'table', addresses: @addresses

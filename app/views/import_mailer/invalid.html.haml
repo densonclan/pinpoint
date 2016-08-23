@@ -1,0 +1,12 @@
+%p
+  Your import contains the following invalid column names. Please fix these before retrying the import:
+%p
+  - @invalid_headers.each do |h|
+    = h
+    %br/  
+%p
+  Valid headers are:
+  %br/
+  - @valid_headers.each do |h|
+    = h
+    %br/

@@ -1,0 +1,31 @@
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th #
+      %th= sortable 'stores.account_number', 'Account Number'
+      %th= sortable 'stores.owner_name', "Owner's name"
+      %th= sortable "orders.total_quantity",'Total Quantity'
+      %th= sortable "options.name", "Option"
+      %th Copied
+      %th Actions
+  %tbody
+    - if orders.empty?
+      %tr
+        %td{colspan: "8"} No Orders to be merged in.
+    - else
+      - orders.each do |o|
+        %tr
+          %td= o.id
+          %td= link_to o.store.account_number, o.store
+          %td= o.store.owner_name
+          %td= o.total_quantity
+          %td= o.option ? o.option.name : '-'
+          %td
+            - if @period_new
+              - if exception = o.skipped_in_period?(@period_new)
+                = link_to '', exception, method: :delete, class: 'order-exception skipped'
+              - else
+                = link_to '', order_exceptions_path(order_exception: {period_id: @period_new.id, order_id: o.id}), method: :post, class: 'order-exception'
+          %td
+            = link_to "Details", o
+            = link_to "Edit", edit_order_path(o)

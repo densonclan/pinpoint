@@ -1,0 +1,6 @@
+- content_for :title do
+  New Task
+= breadcrumbs [['Tasks', tasks_path], ['New Task']]
+.page-header
+  %h1= "New Task #{params[:date] ? "for #{params[:date].to_date.strftime('%d %B %Y')}" : ''}"
+= render 'tasks/form'

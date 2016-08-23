@@ -1,0 +1,42 @@
+<table class="table table-striped table-hover spaced-out">
+  <thead>
+    <tr>
+      <th>Store</th>
+      <th>Task</th>
+      <th>Due Date</th>
+      <th><%= task_assigned_title %></th>
+      <th>Priority</th>
+      <th>Progress</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @tasks.blank? %>
+      <tr><td colspan="7">None</td> </tr>
+    <% else %>
+      <% @tasks.each do |t| %>
+      <tr class="<%= due_date_class(t) %>">
+        <td><%= t.store ? t.store.account_number : 'none' %></td>
+        <td><%= truncate(t.full_text, :length => 80) %></td>
+        <td><%= t.due_date.strftime('%d %B') %></td>
+        <td><%= task_assigned_value(t) %></td>
+        <td><%= priorityText(t.priority) %></td>
+        <td><%= percentagePill(t.completion) %></td>
+        <td><%= link_to "Details", t %></td>
+        <td>
+          <% if current_user.write_access? && (current_user == t.user || current_user == t.agent) %>
+            <%= link_to "Edit", edit_task_path(t) %>
+            <% if t.archived %>
+              <%= link_to "Unarchive", unarchive_task_path(t), method: 'post' %>
+              <%= link_to "Delete", t, confirm: 'Are you sure you want to delete this task?', method: :delete %>
+            <% else %>
+              <%= link_to "Archive", archive_task_path(t), method: 'post' %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @tasks %>

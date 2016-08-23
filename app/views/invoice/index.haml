@@ -1,0 +1,51 @@
+- content_for :title do
+  Invoice
+= breadcrumbs [['Invoice']]
+- if !@result.blank?
+  %ul.import-results
+    - @result.each do |result_message|
+      %li
+        - if result_message[:status] == 'OK'
+          %span.label.label-success Success
+        - else
+          %span.label.label-important Error
+        = result_message[:message]
+.page-header
+  %h1
+    %span
+      %i.icon-circle-arrow-up.icon-2x
+    Invoice
+
+= form_tag processor_invoice_index_path(:format => 'xls'), id: 'order-exporter' do
+  .row.spaced
+    .span3
+      %legend
+        %i.icon-time
+        Select Period
+      %span.help-block Only orders from a given period will be downloaded, if you would like to
+      = select_tag :period, export_period_options
+    .span3
+      %legend
+        %i.icon-filter
+        Filter Results
+        %small (Optional)
+      %span.help-block Unselected fields will retrieve all records, regardless of the type.
+      .option
+        = label_tag :option
+        = select_tag :option, option_options, multiple: true
+      .option
+        = label_tag :ship_via
+        = select_tag :ship_via, options_for_select(ship_via_export_options), multiple: true
+    .span3
+      %legend
+        %i.icon-check
+        Template
+      .option.checkbox
+        = check_box_tag :split_options
+        = label_tag :split_options
+        %em Check to split the options onto individual tabs in the spreadsheet
+    .span3
+      %legend
+        %i.icon-download
+        Invoice
+      .option= submit_tag raw('Download'), :class => 'btn btn-large btn-primary'

@@ -1,0 +1,14 @@
+$(document).ready(function(){
+  new PeriodsChart({
+    periods: <%= raw Period.where(client_id: Client.accessible_by(current_user).pluck(:id)).ordered_among_all.pluck(:period_number).uniq %>,
+    series: [
+      <% Client.with_periods.accessible_by(current_user).each do |c| %>
+        {
+          name: '<%= c.name %>',
+          data: <%= raw order_count_for_client(c) %>
+        },
+      <% end %>
+    ],
+    element: 'orders_chart'
+  });
+});

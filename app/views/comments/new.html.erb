@@ -1,0 +1,8 @@
+<% content_for :title do %>
+  New Note
+<% end %>
+<%= breadcrumbs [['Notes', comments_path], ['New Note']] %>
+<div class="page-header">
+  <h1>New Note</h1>
+</div>
+<%= render 'form' %>

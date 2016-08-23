@@ -1,0 +1,54 @@
+- content_for :title do
+  Distribution Periods
+= breadcrumbs [['Distribution Periods']]
+.page-header
+  %h1
+    Distribution Periods
+    %small
+      = "(#{@periods.length})"
+      = link_to "Add new", new_period_path
+%ul.nav.nav-tabs#dynamicTab
+  - @clients.each do |c|
+    %li= link_to c.name, "#client#{c.id}", 'data-toggle' => 'tab'
+.tab-content
+  - @clients.each do |c|
+    .tab-pane{id: "client#{c.id}"}
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th #
+            %th Week
+            %th Approval deadline
+            %th Print start
+            %th Dispatch
+            %th Date of promotion
+            %th Date of samples
+            %th Complete
+            %th Current
+            %th &nbsp;
+        %tbody
+          - if @periods.select {|p| p.client_id == c.id}.empty?
+            %tr
+              %td{colspan: 10}
+                There are no periods yet.
+                = link_to "Add one!", new_period_path
+          - else
+            - @periods.select {|p| p.client_id == c.id}.each do |s|
+              %tr
+                %td= "#{s.period_number} - #{s.year}"
+                %td= s.week_number
+                %td= period_date s.date_approval
+                %td= period_date s.date_print
+                %td= period_date s.date_dispatch
+                %td= period_date s.date_promo
+                %td= period_date s.date_samples
+                %td
+                  - if s.completed
+                    %i.icon-ok
+                %td
+                  - if s.current
+                    %i.icon-ok
+                %td
+                  = link_to "Edit", edit_period_path(s.id)
+                  - if s.current
+                    = link_to "Review", review_period_path(s.id)

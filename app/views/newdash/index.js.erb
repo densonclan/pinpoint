@@ -1,0 +1,48 @@
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        Highcharts.numberFormat({
+          decimals: 2
+        });
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'sliced_container',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: "Current period's statistics"
+            },
+            tooltip: {
+              pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+              percentageDecimals: 1
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Number of orders',
+                data: [
+                    ['Awaiting Print', <%= dashboard_awaiting_print  %>],
+                    ['In Print', <%= dashboard_in_print  %>],
+                    ['Dispached', <%= dashboard_dispatched %>],
+                    ['Completed', <%= dashboard_completed  %>]
+                ]
+            }]
+        });
+    });
+
+});

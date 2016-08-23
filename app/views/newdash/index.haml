@@ -1,0 +1,37 @@
+- content_for :title do
+  Dashboard
+- content_for :javascripts do
+  = javascript_include_tag dashboard_path
+= breadcrumbs
+.page-header
+  %h1
+    = image_tag current_user.avatar.url(:thumb), :style => 'width: 48px; height: 48px;'
+    Welcome #{current_user.name}.
+    %small
+      ( #{current_user.department.name} )
+.row
+  .span2
+    %ul.nav.nav-pills.nav-stacked
+      - if current_user.write_access?
+        %li= link_to raw('<i class="icon-home"></i> Add new store'), new_store_path
+        %li= link_to raw('<i class="icon-credit-card"></i> Add new order'), new_order_path
+      %li.divider
+        %hr/
+      %li= link_to raw('<i class="icon-envelope"></i> Send a message'), new_message_path
+      %li= link_to raw('<i class="icon-tasks"></i> Show Calendar'), calendar_tasks_path
+      %li
+        %hr/
+      %li= link_to raw('<i class="icon-credit-card"></i> See current orders'), orders_path
+      %li= link_to raw('<i class="icon-bell"></i> See recent activity'), activity_reports_path(:type => 'orders')
+      %li
+        %hr/
+      - if current_user.internal?
+        %li= link_to raw('<i class="icon-circle-arrow-down"></i> Import data'), importer_index_path
+      %li= link_to raw('<i class="icon-circle-arrow-up"></i> Export data'), exporter_index_path
+  .span5
+    = render partial: 'to_do_list'
+    = render partial: 'my_tasks'
+    = render partial: 'messages'
+    = render partial: 'periods'
+  .span5
+    = render partial: 'recent_activity'

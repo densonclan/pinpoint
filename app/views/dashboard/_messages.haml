@@ -1,0 +1,18 @@
+.spaced.messages
+  %legend
+    %i.icon-envelope
+    Messages
+    %small= link_to "View more", messages_path, :class=> 'pull-right'
+  - if my_messages.blank?
+    %p.muted.spaced You have no unread messages.
+  - else
+    %table.table.table-striped.table-hover.spaced-out
+      %thead
+        %tr
+          %th{:style => "width: 55%"} Subject
+          %th Sent by
+      %tbody
+        - my_messages.each do |t|
+          %tr
+            %td= link_to t.subject, message_path(:id => t.id)
+            %td= t.user.name

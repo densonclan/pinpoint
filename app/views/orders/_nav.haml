@@ -1,0 +1,8 @@
+%ul.nav.nav-tabs
+  %li{class: order_tab_class('index')}= link_to "Current Period", orders_path
+  %li{class: order_tab_class('previous')}= link_to "Previous Period", list_orders_path(type: :previous)
+  %li{class: order_tab_class('next')}= link_to "Next Period", list_orders_path(type: :next)
+  - if current_user.internal?
+    %li{class: order_tab_class('all')}= link_to "All Orders", list_orders_path(type: :all)
+    %li{class: order_tab_class('duplicated')}= link_to "Duplicated", list_orders_path(type: :duplicated)
+    %li{class: order_tab_class('quantities')}= link_to "View Statistics", quantities_reports_path

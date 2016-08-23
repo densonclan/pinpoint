@@ -1,0 +1,38 @@
+- content_for :title do
+  Notes for #{@store.account_number}
+= breadcrumbs [['Stores', stores_path], ["Store no. #{@store.account_number}", @store], ['View Notes']]
+.page-header
+  %h1
+    Notes for #{@store.account_number}
+    %small
+      (#{@comments.count})
+      - if can? :create, Comment
+        = link_to "Add new", new_comment_path(:type => 'store', :id => params[:id])
+= render partial: 'menu'
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Full Text
+      %th Author
+      %th Date
+      %th Department
+      %th Actions
+  %tbody
+    - if @comments.blank?
+      %tr
+        %td{:colspan => "5"}
+          There is no notes yet.
+          - if can? :create, Comment
+            = link_to "Add one!", new_comment_path(:type => 'store', :id => params[:id])
+    - else
+      - @comments.each do |d|
+        %tr
+          %td= link_to simple_format( truncate( d.full_text, :length => 100 ) ), comment_path(:id => d.id )
+          %td= d.user.name
+          %td= d.created_at.strftime('%d %B %Y at %H:%M')
+          %td= d.user.department.name
+          %td
+            = link_to "Show details", comment_path(:id => d.id)
+            - if d.user_id == current_user.id || current_user.internal?
+              = link_to "Edit", edit_comment_path( :id => d.id )
+= will_paginate @comments, :renderer => BootstrapPagination::Rails

@@ -1,0 +1,13 @@
+%p= "Your import has finished with #{@success_count} successfully imported #{@name}s"
+- if @errors.empty?
+  %p There were no errors detected
+- else
+  %p The following errors occurred:
+  %table
+    %tr
+      %th Row
+      %th Errors
+    - @errors.each do |error|
+      %tr
+        %td= error.row
+        %td= error.text

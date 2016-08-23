@@ -1,0 +1,4 @@
+ID,Client,Account Number,Owner's Name,Distribution Period,Total Quantity,Option,Page,Status
+<% @orders.each do |o|  %>
+	<%= o.id %>,<%= o.store.client ? o.store.client.name : '' %>,<%= o.store.account_number %>,<%= o.store.owner_name %>,<%= o.period ? o.period.period_number : '' %>,<%= o.total_quantity %>,<%= o.option ? o.option.name : '' %>,<%= o.page ? o.page.name : '' %>,<%= o.status_text %>
+<% end %>

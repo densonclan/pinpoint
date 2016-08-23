@@ -1,0 +1,5 @@
+%ul.nav.nav-tabs
+  %li{class: message_menu_class('index')}= link_to "Inbox (#{current_user.received_messages.unread.count})", messages_path
+  %li{class: message_menu_class('sent')}= link_to 'Sent', sent_messages_path
+  %li{class: message_menu_class('archived')}= link_to 'Archived', archived_messages_path
+  .pull-right= link_to "Send a message", new_message_path

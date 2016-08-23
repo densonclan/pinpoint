@@ -1,0 +1,6 @@
+UserMailer:
+  require_activation_email:
+    - alan.richards@gaskandhawley.com
+    - gary.hunter@gaskandhawley.com
+    - george.swain@gaskandhawley.com
+    - matt@sourcelab.technology

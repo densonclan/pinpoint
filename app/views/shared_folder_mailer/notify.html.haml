@@ -1,0 +1,4 @@
+%p 
+  = "#{@shared_folder.folder.user.name} share a folder with you named #{@shared_folder.folder.name}"
+%p
+  = link_to "Click here to see the folder", browse_folder_path(@shared_folder.folder)

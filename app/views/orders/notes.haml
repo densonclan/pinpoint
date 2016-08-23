@@ -1,0 +1,35 @@
+- content_for :title do
+  = "Notes for ##{@order.id}"
+= breadcrumbs [['Orders', orders_path], ["Order no. ##{@order.id}", @order], ['View Notes']]
+.page-header
+  %h1
+    = "Notes for ##{@order.id}"
+    %small
+      - "(#{@comments.count})"
+      - if current_user.write_access?
+        = link_to "Add new", new_comment_path(type: 'order', id: @order.id)
+= render partial: 'menu'
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Full Text
+      %th Author
+      %th Date
+      %th Group
+      %th Actions
+  %tbody
+    - if @comments.blank?
+      %tr
+        %td{:colspan => "5"}
+          There is no notes yet.
+          - if current_user.write_access?
+            = link_to "Add one!", new_comment_path(type: 'order', id: @order.id)
+    - else
+      - @comments.each do |d|
+        %tr
+          %td= d.full_text
+          %td= d.user.name
+          %td= d.created_at.strftime('%d %B %Y at %H:%M')
+          %td= d.user.department.name
+          %td= link_to "Edit", edit_comment_path( :id => d.id )
+= will_paginate @comments, :renderer => BootstrapPagination::Rails

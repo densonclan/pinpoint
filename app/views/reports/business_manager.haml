@@ -1,0 +1,36 @@
+- content_for :title do
+  Reports
+- content_for :javascripts do
+  = javascript_include_tag business_manager_reports_path(manager: @business_manager)
+= breadcrumbs [['Reports', reports_path], ['Business Managers', business_managers_reports_path], [@business_manager.name]]
+.page-header
+  %h1
+    = "Report for #{@business_manager.name}"
+    %small Business Managers
+= render 'menu'
+.row
+  .span6
+    #orders_chart.big-chart
+  .span6
+    %legend Number of orders
+    .store-details
+      %p
+        %strong Total stores
+        = business_manager_stores
+      %p
+        %strong Total orders
+        = business_manager_orders
+      %p
+        %strong Total completed orders
+        = business_manager_completed_orders
+      %hr/
+      - if largest_business_manager_order
+        %p
+          %strong Biggest order from
+          = link_to largest_business_manager_order.store.account_number, largest_business_manager_order.store
+          = "(Quantity: #{largest_business_manager_order_size})"
+      - if smallest_business_manager_order
+        %p
+          %strong Smallest order from
+          = link_to smallest_business_manager_order.store.account_number, smallest_business_manager_order.store
+          = "(Quantity: #{smallest_business_manager_order_size})"

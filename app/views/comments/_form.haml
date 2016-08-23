@@ -1,0 +1,17 @@
+= render "shared/error_messages", :target => @comment
+= simple_form_for @comment, html: {class: 'taskable'} do |f|
+  %fieldset
+    = f.input :commentable_id, as: :hidden
+    = f.input :commentable_type, as: :hidden
+    = f.input :full_text, label: 'Note'
+    - if @comment.new_record?
+      = f.input :save_as_task, as: :boolean
+      = f.input :assignee_id, label: 'Assign to a person', collection: accessible_users, prompt: 'Select a person', input_html: {id: 'agent-id'}
+      = f.input :department_id, label: "Assign to a department", collection: accessible_departments, prompt: 'Select a department', input_html: {id: 'department-id'}
+      = f.input :due_date, as: :date_picker
+    %hr/
+    .pull-right
+      = f.submit "Save", :class => "btn btn-primary"
+      = link_to "Cancel", :back, :class =>"btn"
+      - unless @comment.new_record?
+        = link_to "Delete", @comment, confirm: 'Are you sure you want to delete this note?', method: :delete, class: "btn btn-danger"

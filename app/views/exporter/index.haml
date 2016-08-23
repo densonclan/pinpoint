@@ -1,0 +1,67 @@
+- content_for :title do
+  Exporter
+= breadcrumbs [['Exporter']]
+- if !@result.blank?
+  %ul.import-results
+    - @result.each do |result_message|
+      %li
+        - if result_message[:status] == 'OK'
+          %span.label.label-success Success
+        - else
+          %span.label.label-important Error
+        = result_message[:message]
+.page-header
+  %h1
+    %span
+      %i.icon-circle-arrow-down.icon-2x
+    Exporter
+= render partial: 'menu'
+= form_tag processor_exporter_index_path(:format => 'xls'), id: 'order-exporter' do
+  .row.spaced
+    .span3
+      %legend
+        %i.icon-time
+        Select Period
+      %span.help-block Only orders from a given period will be downloaded, if you would like to
+      = select_tag :period, export_period_options
+    .span3
+      %legend
+        %i.icon-filter
+        Filter Results
+        %small (Optional)
+      %span.help-block Unselected fields will retrieve all records, regardless of the type.
+      .option
+        = label_tag :option
+        = select_tag :option, option_options, multiple: true
+      .option
+        = label_tag :distributor
+        = select_tag :distributor, distributor_options, multiple: true
+      .option
+        = label_tag :ship_via
+        = select_tag :ship_via, options_for_select(ship_via_export_options), multiple: true
+      .option.checkbox
+        = check_box_tag :has_personalised_panel
+        = label_tag :has_personalised_panel
+      .option.checkbox
+        = check_box_tag :has_generic_panel
+        = label_tag :has_generic_panel
+    .span3
+      %legend
+        %i.icon-check
+        Template
+      %span.help-block Select the template you would like to export the data as.
+      %p= select_tag :template, template_options
+      .option.checkbox
+        = check_box_tag :split_options
+        = label_tag :split_options
+        %em Check to split the options onto individual tabs in the spreadsheet
+    .span3
+      %legend
+        %i.icon-filter
+        Running Order
+        = hidden_field_tag :running_order
+      .option.select2-container.select2-container-multi
+        %ul#running_order_options.select2-container-multi.select2-choices
+          - running_order_options.each do |o|
+            %li.select2-search-choice= o
+      .option= submit_tag raw('Download'), :class => 'btn btn-large btn-primary'

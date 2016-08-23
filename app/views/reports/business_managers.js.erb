@@ -1,0 +1,15 @@
+$(document).ready(function(){
+  new Highcharts.Chart({
+    title: { text: 'Business Manager\'s Orders' },
+    chart: { 
+      renderTo: 'orders_chart',
+      type: 'bar'
+    },
+    xAxis: { categories: <%= business_manager_names.to_json.html_safe %> },
+    yAxis: { title: 'Orders' },
+    series: [{
+      name: 'Orders',
+      data: <%= total_orders_for_managers.to_json.html_safe %>
+    }]
+  });
+});

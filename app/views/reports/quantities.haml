@@ -1,0 +1,55 @@
+- content_for :title do
+  Reports
+= breadcrumbs [['Reports', reports_path], ['Quantities']]
+.page-header
+  %h1
+    Reports
+    %small= "Period: #{@reporter.period_names}"
+= link_to "Export", quantities_reports_path(format: :xls, params: params), class: 'btn btn-info right-btn'
+= render partial: 'menu'
+.row
+  .span3
+    %h3
+      Filter
+      %small (Narrow down results)
+    .advanced-form
+      = form_tag(quantities_reports_path, method: 'get', class: 'form-horizontal') do
+        .row.form-elements
+          .span3
+            %p
+              = label_tag :order_option, raw('<i class="icon-tags"></i> Option')
+              = select_tag :order_option, option_options, multiple: true
+            %p
+              = label_tag :order_distributor, raw('<i class=" icon-shopping-cart"></i> Distributor')
+              = select_tag :order_distributor, distributor_options, multiple: true
+            %p
+              = label_tag :order_period, raw('<i class="icon-time"></i> Distribution Period')
+              = select_tag :order_period, order_period_options, multiple: true
+            %p{:style => "margin-top: 25px"}
+              = submit_tag "Filter", class: 'btn btn-primary'
+              = link_to "Show Results (#{@reporter.orders_count})", advanced_orders_path(params: params), class: 'btn btn-info'
+  /  .span3
+  /    %h3
+  /      Statistics
+  /      %small (Number of orders)
+  /    - if @reporter.empty?
+  /      %strong Sorry. No orders for this period.
+  /    - else
+  /      = render partial: 'order_stats'
+  .span3
+    %h3
+      Options
+      %small (Number of orders)
+    - if @reporter.empty?
+      %strong Sorry. No orders for this period.
+    - else
+      %dl.spaced.bold-definition= render partial: 'option', collection: @reporter.options_with_orders
+  .span3
+    %h3
+      Distributor
+      %small (Number of orders)
+    - if @reporter.empty?
+      %strong Sorry. No orders for this period.
+    - else
+      .spaced.bold-definition
+        %dl= render partial: 'distributor', collection: @reporter.distributors_with_orders

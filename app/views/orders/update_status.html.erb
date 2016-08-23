@@ -1,0 +1,28 @@
+<% content_for :title do %>
+  Update Order Status
+<% end %>
+<%= breadcrumbs [['Orders', orders_path], ["Update Order Status"]] %>
+<div class="page-header">
+  <%= render 'shared/search_form' %>
+  <h1 class="clearfix">Update Order Status <small>(<%= @orders.count %>)</small></h1>
+</div>
+<%= render partial: 'advanced' %>
+<%= render partial: 'nav' %>
+
+<%= form_tag( {:action => 'update_orders'}, :method => 'post', :class => 'form-horizontal') do %>
+  <div class="row">
+    <div class="span3">
+      <%= label_tag :order_option, "Specific Option" %>
+      <%= select_tag :order_option, option_options, class: 'filter', 'data-url' => update_status_orders_path %>
+    </div>
+
+    <div class="span3">
+      <%= label_tag :order_status, "Order status" %>
+      <%= select_tag :order_status, order_status_options, {:prompt => "Please select..."} %>
+    </div>
+    <div class="span3">
+      <%= submit_tag "Update", :class => 'btn btn-success', :style => "margin-top: 25px" %>
+    </div>
+  </div>
+<% end %>
+<%= render partial: 'table' %>

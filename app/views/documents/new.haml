@@ -1,0 +1,6 @@
+- content_for :title do
+  New Document
+= breadcrumbs [['Documents', documents_path], ['New Document']]
+.page-header
+  %h1 New Document
+= render partial: 'form'

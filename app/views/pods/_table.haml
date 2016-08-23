@@ -1,0 +1,33 @@
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th Tracking number
+      %th Date Collected
+      %th Reference
+      %th Parcels Collected
+      %th Service
+      %th Business Name
+      %th Postcode
+      %th Date Delivered
+      %th Delivery Depot  
+      %th Parcels Delivered
+      %th Signed By
+      %th Status
+      %th Updated
+  %tbody
+    - @pods.each do |p|
+      %tr
+        %td= p.tracking_number
+        %td= pod_date p.collection_date
+        %td= p.reference
+        %td= p.num_parcels_collected
+        %td= p.service_level
+        %td= p.business_name
+        %td= p.postcode
+        %td= pod_date p.delivery_date
+        %td= p.delivery_depot
+        %td= p.num_parcels_delivered
+        %td= p.signature
+        %td= p.status
+        %td= "#{time_ago_in_words(p.updated_at)} ago"
+= will_paginate @addresses, :renderer => BootstrapPagination::Rails

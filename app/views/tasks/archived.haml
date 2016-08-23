@@ -1,0 +1,9 @@
+- content_for :title do
+  Archived Tasks
+= breadcrumbs [['Archived Tasks']]
+.page-header
+  %h1
+    Archived Tasks
+    %small= "(#{@tasks.count})"
+= render 'menu'
+= render partial: 'table'

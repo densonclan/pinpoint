@@ -1,0 +1,20 @@
+- content_for :title do
+  Importer
+= breadcrumbs [['Bargain Booze']]
+
+.page-header
+  %h1
+    %span
+      %i.icon-circle-arrow-down.icon-2x
+    Bargain Booze
+
+= form_tag bargain_booze_index_path, id: 'bargain_booze_export_form', multipart: true do |f|
+  .row.spaced
+    .span4
+      %legend
+        %i.icon-circle-arrow-down
+        Import file
+      %span.help-block Select a file to be imported. Only approved .csv files are allowed.
+      %p= file_field_tag :spreadsheet
+      %hr/
+      = submit_tag 'Process', :class => "btn btn-primary btn-large"

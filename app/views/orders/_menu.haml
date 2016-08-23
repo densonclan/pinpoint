@@ -1,0 +1,6 @@
+%ul.nav.nav-tabs
+  %li{class: order_menu_class('show')}= link_to "Summary", @order
+  %li{class: order_menu_class('notes')}= link_to "Notes (#{@order.comments.count})", notes_order_path(@order)
+  %li= link_to "View Store", @order.store
+  - if current_user.write_access?
+    %li.pull-right{class: order_menu_class('edit')}= link_to "Edit Order", edit_order_path(@order)

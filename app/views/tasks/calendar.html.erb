@@ -1,0 +1,65 @@
+<% content_for :title do %>
+  Calendar
+<% end %>
+<%= breadcrumbs [['Tasks', tasks_path], ['Calendar']] %>
+<div class="page-header">
+  <h1>Calendar <small>(<%= @tasks.count %>)</small></h1>
+</div>
+<%= render 'menu' %>
+<div id="calendar">
+  <h2 id="month" class="" data-date="<%= @date.strftime("%d-%m-%Y") %>" data-date-format="d-m-y">
+    <%= link_to "<", :month => (@date.beginning_of_month-1).strftime("%Y-%m") %>
+    <%=h @date.strftime("%B %Y") %>
+    <%= link_to ">", :month => (@date.end_of_month+1).strftime("%Y-%m") %>
+  </h2>
+  <%= calendar_for @tasks, :year => @date.year, :month => @date.month do |calendar| %>
+    <%= calendar.head('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') %>
+    <% calendar.day(:day_method => :due_date) do |task, tasks| %>
+    <div>
+      <% if current_user.write_access? %>
+        <%= link_to raw("#{task.day} <i class=\"icon-plus\"></i>"), new_task_path(:date => task.to_date), :class => 'day_name' %>
+      <% else %>
+        <%= task.day %>
+      <% end %>
+
+      <% @periods.each do |d| %>
+
+        <% if !d.date_promo.blank? && task.to_date == d.date_promo.to_date %>
+          <small class="label">P<%=d.period_number %> <%= d.client.name %> Date of Promotion</small>
+        <% end %>
+
+        <% if !d.date_promo_end.blank? && task.to_date == d.date_promo_end.to_date %>
+          <small class="label">P<%=d.period_number %> <%= d.client.name %> End of Promotion</small>
+        <% end %>
+
+        <% if !d.date_samples.blank? && task.to_date == d.date_samples.to_date %>
+          <small class="label">P<%=d.period_number %> <%= d.client.name %> Date for Samples</small>
+        <% end %>
+
+        <% if !d.date_approval.blank? && task.to_date == d.date_approval.to_date %>
+          <small class="label">P<%=d.period_number %> <%= d.client.name %> Approval deadline</small>
+        <% end %>
+
+        <% if !d.date_print.blank? && task.to_date == d.date_print.to_date %>
+          <small class="label">P<%=d.period_number %> <%= d.client.name %> Print start</small>
+        <% end %>
+
+        <% if !d.date_dispatch.blank? && task.to_date == d.date_dispatch.to_date %>
+          <small class="label">P<%=d.period_number %> <%= d.client.name %> Dispatch date</small>
+        <% end %>
+
+      <% end %>
+
+      <ul>
+        <% for task in tasks %>
+          <li class="badge <%= task_label_class(task) %> task">
+            <% if task.completion == 100 %> <i class="icon-ok"></i> <% end %>
+            <%= link_to h(truncate(task.full_text, :length => 80)), task %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+  <% end %>
+</div>
+

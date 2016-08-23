@@ -1,0 +1,6 @@
+= form_tag({action: "search"}, method: 'get', class: "search-form") do
+  = hidden_field_tag :type, params[:type]
+  = text_field_tag :query, params[:query], {placeholder: "e.g. reference number"}
+  %button.btn{type: 'submit'} Search
+  - if show_advanced_button_on_search_form?
+    %button.btn.btn-info.btn-advanced{:type => "submit"} Advanced

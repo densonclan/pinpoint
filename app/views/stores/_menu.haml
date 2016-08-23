@@ -1,0 +1,9 @@
+%ul.nav.nav-tabs
+  %li{class: store_menu_class('show')}= link_to "Store details", @store
+  %li{class: store_menu_class('other')}= link_to "Other stores (#{@store.find_others.length})", other_store_path(@store)
+  %li{class: store_menu_class('orders')}= link_to "Order history (#{@store.orders.length})", orders_store_path(@store)
+  %li{class: store_menu_class('notes')}= link_to "Notes (#{@store.comments.length})", notes_store_path(@store)
+  %li{class: store_menu_class('documents')}= link_to "Documents (#{@store.documents.length})", documents_store_path(@store)
+  %li{class: store_menu_class('map')}= link_to "Maps", map_store_path(@store)
+  - if current_user.write_access?
+    %li.pull-right= link_to "Edit Store", edit_store_path(@store)

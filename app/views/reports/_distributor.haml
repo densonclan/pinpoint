@@ -1,0 +1,11 @@
+%dt= distributor.name
+%dd
+  %p
+    %strong Orders
+    = @reporter.orders_for_distributor_count distributor
+  %p
+    %strong Boxes
+    = @reporter.orders_for_distributor_box_count distributor
+  %p
+    %strong Leaflets
+    = @reporter.orders_for_distributor_leaflet_count distributor

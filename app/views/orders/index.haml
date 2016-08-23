@@ -1,0 +1,12 @@
+- content_for :title do
+  = page_title
+= breadcrumbs [[page_title]]
+.page-header
+  = render 'shared/search_form'
+  %h1.clearfix
+    = page_title
+    %small
+      = "(#{@orders.total_entries})"
+      - if current_user.write_access?
+        = link_to "Add new", new_order_path
+= render partial: 'table_and_nav'

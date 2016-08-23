@@ -1,0 +1,15 @@
+%p
+  %label Due Date:
+  = @task.due_date.strftime('%d %B')
+%p
+  %label Priority:
+  = priorityText(@task.priority)
+%p
+  %label Percentage complete:
+  = "#{@task.completion}%"
+%p= @task.full_text
+%p= link_to "Click here to view the task on Pinpoint now", task_url(@task)
+%p
+  Regards
+  %br/
+  The Pinpoint Admin

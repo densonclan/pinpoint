@@ -1,0 +1,83 @@
+form#order-form
+  input.string, select
+    width: 200px
+  table
+    input.numeric
+      width: 65px
+    input.string
+      width: 75px
+    select
+      width: auto
+    select.week
+      width: 200px
+      font-size: 0.9em
+
+ul#distributions
+  margin-bottom: 50px
+  .distributor
+    width: 8%
+  .quantity
+    width: 6%
+  .boxes
+    width: 6%
+  .contract
+    width: 8%
+  .leaflet
+    width: 8%
+  .week
+    width: 20%
+  .via
+    width: 6%
+  .desc
+    width: 8%
+  .address
+    width: 15%
+  .publisher
+    width: 15%
+  .line
+    width: 20%
+    clear: both
+    font-weight: bold
+    text-align: right
+    margin-top: 6px
+
+  ul.postcodes
+    border: dashed #dddddd 1px
+    margin: 6px 0 10px 50px
+    padding: 2px 8px 8px 8px
+    float: left
+    width: 50%
+    font-size: 0.9em
+    li
+      float: left
+      width: 100%
+      padding: 0
+      border-top: 0
+      background-color: transparent
+      div
+        float: left
+    .postcode
+      width: 25%
+    .households
+      width: 25%
+    .businesses
+      width: 25%
+    .total
+      width: 25%
+
+.address-block
+  height: 172px
+
+form#order-form
+  &.has-lock
+    tr.odist:hover
+      .clear-distribution
+        display: block
+  td.pc
+    position: relative
+  .clear-distribution
+    display: none
+    position: absolute
+    cursor: pointer
+    top: 13px
+    right: 5px

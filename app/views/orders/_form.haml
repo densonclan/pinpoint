@@ -1,0 +1,96 @@
+= render "shared/error_messages", :target => @order
+= simple_form_for @order, :html => {class: "form-horizontal #{form_lock_class(@order)}", id: 'order-form' } do |f|
+  %fieldset
+    %legend
+      Basic details
+      = render partial: 'shared/lock', locals: {object: @order}
+    .row.spaced
+      .span3= f.input :account_number, input_html: {class: 'typeahead-account'}
+      .span3= f.input :option_id, collection: options_for_order(@order)
+      .span3
+        .input
+          = f.label :total_price
+          .input-prepend.input-append
+            %span.add-on &pound;
+            = f.text_field :total_price, class: 'span2', id: "appendedPrependedInput"
+            %span.add-on .00
+      .span3= f.input :period_id, collection: period_options_for_order(@order), label: "Distribution Period"
+    %legend Distribution
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th Distributor
+          %th Quantity
+          %th Contract No.
+          %th Leaflet No.
+          %th Notes
+          %th Delivery Week
+          %th Ship Via
+          %th Address
+          %th Publisher
+          %th Postcodes
+      %tbody
+        - index = 0
+        = f.simple_fields_for :distributions do |d|
+          %tr.odist
+            %td= d.input_field :distributor_id, collection: distributors
+            %td= d.input_field :total_quantity, class: 'total-quantity-input'
+            %td= d.input_field :contract_number
+            %td= d.input_field :reference_number
+            %td= d.input_field :notes
+            %td= d.input_field :distribution_week, collection: distribution_weeks(@order.period), class: 'week'
+            %td= d.input_field :ship_via, collection: ship_via_options
+            - if d.object.id
+              %td= link_to distribution_address(d.object), new_address_path(distribution_id: d.object.id)
+              %td= link_to publisher_address(d.object), new_address_path(distribution_id: d.object.id, publisher: 1)
+            - elsif d.object.address || d.object.publisher
+              %td
+                = link_to distribution_address(d.object), new_address_path(distribution_id: d.object.id)
+                = d.hidden_field :address_id
+              %td
+                = link_to publisher_address(d.object), new_address_path(distribution_id: d.object.id, publisher: 1)
+                = d.hidden_field :publisher_id
+            - else
+              %td &nbsp;
+              %td &nbsp;
+            %td.pc
+              - if d.object.id.nil? && d.object.postcode_ids
+                = hidden_field_tag "#{d.object_name}[postcode_ids]", d.object.postcode_ids
+                = link_to postcode_sector_names_by_id(d.object.postcode_ids), '#postcode_search', 'data-toggle' => "modal", class: 'postcode-popup', id: "distribution-#{index}", 'data-object-id' => d.object_name
+                = image_tag 'cross.png', class: 'clear-distribution'
+                = d.input_field :_destroy, as: :hidden, class: 'destroy-input'
+              - else
+                = hidden_field_tag "#{d.object_name}[postcode_ids]", postcode_sector_ids(d.object)
+                = link_to postcode_sector_names(d.object), '#postcode_search', 'data-toggle' => "modal", class: 'postcode-popup', id: "distribution-#{d.object.id}", 'data-object-id' => d.object_name
+                = image_tag 'cross.png', class: 'clear-distribution'
+                = d.input_field :_destroy, as: :hidden, class: 'destroy-input'
+          - index += 1
+        %tr.totals
+          %td Total
+          %td#sum-order-total-quantity= sum_order_distribution_total_quantities(@order)
+          %td{colspan: 8} &nbsp;
+
+    %legend Additional Comments
+    = f.fields_for :comments do |c|
+      = c.input :full_text, rows: 5
+    %hr/
+    .pull-right
+      = f.submit "Save", class: "btn btn-primary save-button"
+      = link_to "Cancel", orders_path, class: "btn"
+      - unless @order.new_record?
+        = link_to "Delete", @order, method: :delete, class: "btn btn-danger delete-button"
+
+#postcode_search.modal.fade{tabindex: -1, role: 'dialog', 'aria-hidden' => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-hidden' => "true"} &times;
+        %h3.modal-title Postcode Lookup
+      .modal-body
+        = form_tag search_postcode_sectors_path, id: 'postcode-form' do
+          = label_tag :q, 'Search'
+          = search_field_tag :q, nil, placeholder: 'e.g. WF6', class: 'typeahead-postcode'
+        %ul#selected-postcodes
+      .modal-footer
+        %button.btn.btn-default{type: 'button', 'data-dismiss' => 'modal'} Cancel
+        %button#save-postcodes.btn.btn-primary{type: 'button', 'data-dismiss' => 'modal'} Save

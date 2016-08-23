@@ -1,0 +1,39 @@
+- content_for :title do
+  Clients Reports
+- content_for :javascripts do
+  = javascript_include_tag clients_reports_path(format: :js)
+
+= breadcrumbs [['Client Reports']]
+.page-header
+  %h1 Clients
+= render partial: 'menu'
+.row
+  - @clients.each do |c|
+    .span4
+      %legend= "#{c.name} statistics"
+      .store-details
+        .small-chart{:id => "orders_chart_#{c.id}"}
+        %hr/
+        %p
+          %strong Total orders
+          = number_with_delimiter(c.orders.count)
+        %p
+          %strong Total completed orders
+          = number_with_delimiter(c.orders.completed.count)
+        %p
+          %strong Total leaflets
+          = number_with_delimiter(c.orders.count_leaflets)
+        %hr/
+        - unless c.orders.empty?
+          %p
+            %strong Biggest order from
+            = link_to largest_order_for(c).store.account_number, largest_order_for(c).store
+            = "(#{largest_order_for(c).total_quantity} )"
+          %p
+            %strong Smallest order from
+            = link_to smallest_order_for(c).store.account_number, smallest_order_for(c).store
+            = "(#{smallest_order_for(c).total_quantity})"
+          %p
+            %strong Total Orders this Period
+            = current_orders_count(c)
+        %hr/

@@ -1,0 +1,13 @@
+%p
+  Your import encountered the following error. This will need to be resolved before the import is tried again:
+%p Please contact support@pinpointlms.co.uk for help.
+
+.hidden{style: 'display:none'}
+  %p= @exception.message
+
+  %p
+    Backtrace:
+    %br/
+    - @exception.backtrace.each do |b|
+      = b
+      %br/

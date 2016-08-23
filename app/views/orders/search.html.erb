@@ -1,0 +1,17 @@
+<% content_for :title do %>
+  Search results for: <%= params[:query] %>
+<% end %>
+
+<%= breadcrumbs [['Orders', orders_path], ["Search results for #{params[:query]}"]] %>
+<div class="page-header">
+  <%= render 'shared/search_form' %>
+  <h1>Search results for: <%= params[:query] %> <small>(<%= @orders.total_entries %>)
+      <% if can? :manage, Order %>
+        <%= link_to "Add new", new_order_path %>
+      <% end %>
+    </small>
+  </h1>
+</div>
+
+<%= render :partial => 'advanced' %>
+<%= render :partial => 'table', :orders => @orders %>

@@ -1,0 +1,83 @@
+- content_for :title do
+  View Order
+= breadcrumbs [['Orders', orders_path], ["View Order"]]
+.page-header
+  %h1
+    Order Summary
+    %small
+      Account number: #{@order.store.account_number}
+= render 'menu'
+.row.spaced.store-details
+  .span6
+    %p
+      %strong Account number:
+      = @order.store.account_number
+    %p
+      %strong Reference number:
+      = @order.store.reference_number
+    %hr/
+    %p
+      %strong Total Quantity:
+      = @order.total_quantity
+    %p
+      %strong Total Boxes:
+      = order_total_boxes(@order)
+    %p
+      %strong Page Format:
+      = @order.page ? @order.page.name : '-'
+    %p
+      %strong Option:
+      = @order.option ? @order.option.name : '-'
+    %p
+      %strong Period:
+      = @order.period ? @order.period.period_number : '-'
+  = render partial: 'address', locals: {address: @order.store.address} if @order.store.address
+%legend Distribution
+%ul.table#distributions
+  %li.header
+    .distributor Distributor
+    .quantity Quantity
+    .boxes Boxes
+    .contract Contract No.
+    .leaflet Leaflet No.
+    .week Distribution Week
+    .via Ship Via
+    .desc Notes
+    .address Address
+    .publisher Publisher
+  - @order.distributions.ordered.each do |d|
+    %li{class: cycle(nil,'odd')}
+      .distributor= d.distributor.name
+      .quantity= d.total_quantity
+      .boxes= distribution_total_boxes(d, @order.page)
+      .contract= d.contract_number.blank? ? raw('&nbsp;') : d.contract_number
+      .leaflet= distribution_leaflet(@order, d)
+      .week= distribution_week(@order.period, d.distribution_week)
+      .via= d.ship_via.blank? ? raw('&nbsp;') : d.ship_via
+      .desc= d.notes.blank? ? raw('&nbsp;') : d.notes
+      .address= distribution_address(d)
+      .publisher= publisher_address(d)
+      - if d.postcode_sectors.length > 0
+        .line Postcodes:
+        %ul.postcodes
+          %li.header
+            .postcode Postcode
+            .households Households
+            .businesses Businesses
+            .total Total
+          - d.postcode_sectors.each do |s|
+            %li
+              .postcode= s.to_s
+              .households= s.residential
+              .businesses= s.business
+              .total= s.total
+          - if d.postcode_sectors.length > 1
+            %li.totals
+              .postcode Totals
+              .households= d.residential_total
+              .businesses= d.business_total
+              .total= d.total
+  %li.totals
+    .distributor Total
+    .quantity= sum_order_distribution_total_quantities(@order)
+    .boxes= sum_order_distribution_total_boxes(@order)

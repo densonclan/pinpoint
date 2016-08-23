@@ -1,0 +1,18 @@
+.span3
+  %legend= address_type_label(address)
+  .address-block
+    %p
+      = address.title
+      = address.full_name
+    %p= address.business_name
+    %p= address.first_line
+    %p= address.second_line
+    %p= address.third_line
+    %p= address.city
+    %p= address.county
+    %p= address.postcode
+  %hr/
+  - unless address.phone_number.blank?
+    %p= "Telephone: #{address.phone_number}"
+  - unless address.email.blank?
+    %p= "Email Address: #{address.email}"

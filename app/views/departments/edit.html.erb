@@ -1,0 +1,89 @@
+<% content_for :title do %>
+  Edit Group
+<% end %>
+
+<ul class="breadcrumb">
+  <li><%= link_to "Dashboard", root_path %><span class="divider">/</span></li>
+  <li><%= link_to "Groups", departments_path %> <span class="divider">/</span></li>
+  <li class="active">Edit Group</li>
+</ul>
+
+<div class="page-header">
+  <h1>Edit Group</h1>
+</div>
+
+<%= render "shared/error_messages", :target => @department %>
+
+<div id="dynamicTab">
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#basic">Basic Details</a></li>
+    <li><a href="#users">Assigned Users</a></li>
+  </ul>
+
+</div>
+
+<%= form_for @department, :url => { :action => 'update'},:html => { :class => "form-horizontal" } do |f| %>
+  <fieldset>
+      <div class="tab-content">
+        <div id="basic" class="tab-pane active clearfix">
+
+              <div class="control-group">
+                <%= f.label :name, :class => "control-label" %>
+                <div class="controls">
+                  <%= f.text_field :name %>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <%= f.label :description, :class => "control-label" %>
+                <div class="controls">
+                  <%= f.text_area :description, :rows => 4 %>
+                </div>
+              </div>
+
+        </div>
+
+        <div id="users" class=" tab-pane">
+
+              <div class="control-group">
+                  <label for="e15" class="control-label">Assigned people</label>
+                <div class="controls">
+                  <p><%= hidden_field :e15, :assigned_users,:value => @department.users.map{|u| u.name}.join(','), :style => "width: 250px;" %></p>
+
+                  <div id="e15_val" class="help-block"><%= @department.users.map{|u| u.name}.join(',') %></div>
+                </div>
+              </div>
+
+        </div>
+      </div>
+    <hr>
+    <div class="pull-right">
+    <%= f.submit "Save", :class => "btn btn-primary" %>
+    <%=link_to "Cancel", departments_path, :class =>"btn" %>
+    <%=link_to "Delete", department_path(:id => @department.id), :confirm => 'Are you sure you want to delete it?', :method => :delete, :class =>"btn btn-danger" %>
+    </div>
+  </fieldset>
+<% end %>
+
+<%= content_for :javascripts do %>
+  <script type="text/javascript">
+    (function($){
+
+      /**
+       * User selector
+       */
+      $("#e15_assigned_users").select2({ tags: <%= raw(User.all.map {|u| u.name}) %> });
+      $("#e15_assigned_users").on("change", function() {
+        $("#e15_val").html( $("#e15_assigned_users").val());
+      });
+
+      $("#e15_fields").select2("container").find("ul.select2-choices").sortable({
+          containment: 'parent',
+          start: function() { $("#e15_assigned_users").select2("onSortStart"); },
+          update: function() { $("#e15_assigned_users").select2("onSortEnd"); }
+      });
+
+    })(jQuery,window);
+  </script>
+<% end %>

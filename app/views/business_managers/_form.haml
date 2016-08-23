@@ -1,0 +1,14 @@
+= render "shared/error_messages", target: @manager
+= simple_form_for @manager do |f|
+  %fieldset
+    = f.input :client_id, collection: clients
+    = f.input :name
+    = f.input :email
+    = f.input :phone_number
+    = f.input :additional_info
+    %hr/
+    .pull-right
+      = f.submit "Save", class: "btn btn-primary"
+      = link_to "Cancel", business_managers_path, class: "btn"
+      - unless @manager.new_record?
+        = link_to "Delete", @manager, confirm: 'Are you sure?', method: :delete, class: "btn btn-danger"      

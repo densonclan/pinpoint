@@ -1,0 +1,26 @@
+= render "shared/error_messages", :target => @address
+= simple_form_for @address, class: form_lock_class(@store) do |f|
+  %fieldset
+    = f.input :store_id, as: :hidden, val: @store.id if @store
+    = f.input :distribution_id, as: :hidden, val: @distribution.id if @distribution
+    = hidden_field_tag 'address[publisher]', 1 if params[:publisher]
+    = address_form_type_input(f)
+    = f.input :title, collection: person_title_options
+    = f.input :full_name
+    = f.input :business_name
+    %hr/
+    = f.input :first_line
+    = f.input :second_line
+    = f.input :third_line
+    = f.input :city
+    = f.input :county, collection: english_counties, as: :grouped_select, group_method: :counties
+    = f.input :postcode
+    %hr/
+    = f.input :phone_number
+    = f.input :email
+    %hr/
+  .pull-right
+    = f.submit "Save", class: "btn btn-primary"
+    = link_to "Cancel", addresses_path, class: "btn"
+    - unless @address.new_record?
+      = link_to "Delete", @address, confirm: 'Are you sure?', method: :delete, class: "btn btn-danger"

@@ -1,0 +1,23 @@
+%table.table.table-striped.table-hover#permissions-table
+  %thead
+    %tr
+      %td
+        %b= @user.name
+        can:
+      - Permission::ACTIONS.each do |a|
+        %td
+          = check_box_tag a, nil, false, class: 'activate-col'
+          = label_tag a.titleize
+  %tbody
+    - Permission::SUBJECT_GROUPS.each do |group|
+      %tr
+        %td
+          %strong
+            %i.icon-star
+            = group[:name]
+        %td{:colspan => "6"}  
+      - group[:subjects].each do |subject|
+        %tr
+          %td= subject
+          - Permission::ACTIONS.each do |action|
+            %td= check_box_tag "permissions[#{subject}][]", action, @user.has_permission?(subject, action, @client), class: action

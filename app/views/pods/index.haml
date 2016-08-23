@@ -1,0 +1,13 @@
+- content_for :title do
+  Proof Of Delivery
+
+= breadcrumbs [['Proof Of Delivery']]
+.page-header
+  = render 'shared/search_form'
+  %h1
+    Proof Of Delivery
+    %small
+      = "(#{@pods.total_entries})"
+      = link_to "Add new", new_pod_path
+
+= render 'table', pods: @pods

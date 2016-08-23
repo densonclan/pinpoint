@@ -1,0 +1,20 @@
+= simple_form_for @pod do |f|
+  %fieldset
+    = f.input :tracking_number
+    = f.input :collection_date, as: :date_picker
+    = f.input :reference
+    = f.input :num_parcels_collected, label: 'Number of Parcels Collected'
+    = f.input :service_level
+    = f.input :postcode
+    = f.input :delivery_date, as: :date_picker
+    = f.input :delivery_depot
+    = f.input :num_parcels_delivered, label: 'Number of Parcels Delivered'
+    = f.input :signature, label: 'Signed for By'
+    = f.input :status, label: 'Status'
+
+  %hr/
+  .pull-right
+    = f.submit "Save", class: "btn btn-primary"
+    = link_to "Cancel", pods_path, class: "btn"
+    - unless @pod.new_record?
+      = link_to "Delete", @pod, confirm: 'Are you sure?', method: :delete, class: "btn btn-danger"

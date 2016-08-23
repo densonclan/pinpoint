@@ -1,0 +1,8 @@
+.advanced-form.spaced{class: (show_advanced_filter? ? nil : 'hidden-el')}
+  = form_tag(advanced_addresses_path, method: 'get', class: 'form-horizontal') do
+    .row
+      .span3
+        = label_tag :address_type
+        = select_tag :address_type, address_type_filter_options, multiple: true
+      .span3
+        = submit_tag "Filter", :class => 'btn btn-primary', :style => 'margin-top: 25px;'

@@ -1,0 +1,15 @@
+- content_for :title do
+  = stores_page_title
+= breadcrumbs [['Stores']]
+.page-header
+  = render 'shared/search_form'
+  %h1
+    = stores_page_title
+    %small
+      = "(#{@stores.count})"
+      - if current_user.write_access?
+        = link_to "Add new", new_store_path
+= link_to 'Export', export_stores_path(params.merge({format: :xls})), class: 'btn btn-info right-btn'
+= render partial: 'advanced', orders: @orders
+= render partial: 'nav', orders: @orders
+= render partial: 'table',    orders: @orders

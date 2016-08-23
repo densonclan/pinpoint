@@ -1,0 +1,102 @@
+- content_for :title do
+  View Store
+= breadcrumbs [['Stores', stores_path], ["Store #{@store.account_number}"]]
+.page-header
+  .pull-right= link_to 'Download PDF', store_path(@store, format: :pdf), class: 'btn btn-right'
+  %h1
+    Store no.
+    = @store.account_number
+    %small= "(#{@store.client.name})"
+= render partial: 'menu'
+.row.store-details
+  
+  - if @store.logo != ''
+    .span4
+      %p
+        %strong Account number:
+        = @store.account_number
+        - if store_has_logo?(@store)
+          %strong Logo updated: 
+          = logo_updated_at(@store)
+          %p= logo_image_tag(@store)
+        - else
+          %strong Logo Not Loaded
+          %p= image_tag("DUMMY.BMP")
+  .span4
+    %p
+      %strong Owner's name:
+      = @store.owner_name
+    %p
+      %strong Postcode:
+      = @store.postcode
+    %hr/
+    %p
+      %strong Account Number:
+      = @store.account_number
+    %p
+      %strong Reference Number:
+      = @store.reference_number
+    %p
+      %strong Business Manager:
+      = @store.business_manager ?  @store.business_manager.name : ' None'
+    %p
+      %strong Preferred Distribution:
+      = @store.preferred_distribution
+    %hr/
+    %p
+      %strong Personalised address panel:
+      = @store.personalised_address_panel ? 'Yes' : 'No'
+    %p
+      %strong Personalised panel 1:
+      = @store.personalised_panel_1 ? 'Yes' : 'No'
+    %p
+      %strong Personalised panel 2:
+      = @store.personalised_panel_2 ? 'Yes' : 'No'
+    %p
+      %strong Personalised panel 3:
+      = @store.personalised_panel_3 ? 'Yes' : 'No'
+    %hr/
+
+    %p
+      %strong Total orders
+      = @store.orders.count
+    %p
+      %strong Total stores
+      = @store.find_others.length + 1
+    %p
+      %strong Store Urgent:
+      = @store.store_urgent ? 'Yes' : 'No'
+    %p
+      %strong Participation Only:
+      = @store.participation_only ? 'Yes' : 'No'
+    %p
+      %strong Preferred Option:
+      = @store.preferred_option ? @store.preferred_option.name : '-'
+    %p
+      %strong Additional Info:
+      = @store.description
+
+    - if @store.address
+      %legend
+        Store Address
+      
+      %p= @store.address.title + ' ' + @store.address.full_name
+      %p= @store.address.business_name
+      %p= @store.address.first_line
+      %p= @store.address.second_line
+      %p= @store.address.third_line
+      %p= @store.address.city
+      %p= @store.address.county
+      %p= @store.address.postcode
+    
+      %hr/
+    
+      %p
+        %strong Email:
+        = @store.address.email
+      %p
+        %strong Telephone:
+        = @store.address.phone_number
+      %p
+        %strong Mobile:
+        = @store.address.mobile

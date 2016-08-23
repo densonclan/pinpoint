@@ -1,0 +1,33 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Client</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone number</th>
+      <th>Stores</th>
+      <th class="actions-col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @managers.blank? %>
+      <tr>
+        <td colspan="7">There are no managers yet. <%= link_to "Add one!", new_business_manager_path %></td>
+      </tr>
+    <% else %>
+      <% @managers.each do |m| %>
+      <tr>
+        <td><%= m.client ? m.client.name : '-' %></td>
+        <td><%= m.name %></td>
+        <td><%= m.email %></td>
+        <td><%= m.phone_number %></td>
+        <td><%= link_to m.stores.count, advanced_stores_path(:client => '', :address => {:county => ''}, :business_manager => m.id) %></td>
+        <td class="actions-col">
+          <%= link_to "Edit", edit_business_manager_path(m) %>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @managers, :renderer => BootstrapPagination::Rails %>

@@ -1,0 +1,39 @@
+- content_for :title do
+  Recent Activity
+= breadcrumbs [['Reports', reports_path], ['Recent Activity']]
+= render 'menu'
+%ul.nav.nav-pills
+  %li.disabled
+    %a{:href => "#"} Show all activity for:
+  %li{:class => report_activity_type_class('orders')}= link_to "Orders", activity_reports_path(type: 'orders')
+  %li{:class => report_activity_type_class('stores')}= link_to "Stores", activity_reports_path(type: 'stores')
+
+= form_tag activity_reports_path(type: params[:type]), class: 'form-horizontal', method: :get do
+  .row
+    .span3
+      = label_tag :updated_by, "Updated By"
+      = select_tag :updated_by, activity_search_users, prompt: '- select -'
+    .span3
+      = label_tag :date_from, "From Date"
+      = text_field_tag :date_from, params[:date_from], class: 'datepicker', 'data-date-format' => 'yyyy-mm-dd'
+    .span3
+      = label_tag :date_to, "To Date"
+      = text_field_tag :date_to, params[:date_to], class: 'datepicker', 'data-date-format' => 'yyyy-mm-dd'
+    .span3
+      = label_tag :account_number, "Account Number"
+      = text_field_tag :account_number, params[:account_number], class: 'typeahead-account', autocomplete: "off", "data-provide" => "typeahead"
+      = submit_tag "Filter", :class => 'btn btn-primary spaced-button'
+  
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      - if report_activity_orders?
+        %th #
+      %th Client
+      %th Account Number
+      %th Updated
+      %th By
+      %th Type
+      %th Changes
+  %tbody= render partial: report_activity_orders? ? 'order' : 'store', collection: @resources
+= will_paginate @resources, :renderer => BootstrapPagination::Rails

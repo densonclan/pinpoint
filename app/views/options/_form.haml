@@ -1,0 +1,31 @@
+= render "shared/error_messages", :target => @option
+= simple_form_for @option, html: {class: 'option-form'} do |f|
+  %fieldset
+    = f.input :client_id, collection: clients
+    = f.input :name
+    = f.input :reference_number
+    = f.input :description
+    = f.input :price_zone, collection: option_price_zones
+    = f.input :multibuy
+    = f.input :licenced
+    = f.input :total_ambient
+    = f.input :total_licenced
+    = f.input :total_temp
+    .value-titles
+      %label Period
+      .all-years
+        - @option.values.ordered.each do |v|
+          - if display_option_value_year?(v)
+            .value-year= "#{v.period.year}: "
+          .value-title= link_to v.period.period_number, '#', {'data-id' => v.id, class: v.current? ? 'selected' : nil}
+    = f.simple_fields_for :values do |g|
+      .value{class: (g.object.current? ? 'selected ' : '') + "value-#{g.object.id}"}
+        %div
+          %label= "Period #{g.object.period.period_number} (#{g.object.period.year})"
+        = g.input :page_id, collection: pages
+    %hr
+    .pull-right
+      = f.submit 'Save', class: 'btn btn-primary'
+      = link_to 'Cancel', options_path, class: 'btn'
+      - unless @option.new_record?
+        = link_to "Delete", @option, confirm: 'Are you sure you want to delete it?', method: :delete, class: "btn btn-danger"

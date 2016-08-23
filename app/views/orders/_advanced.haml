@@ -1,0 +1,14 @@
+.advanced-form.spaced{class: (show_advanced_filter? ? nil : 'hidden-el')}
+  = form_tag(advanced_orders_path, method: :get, class: 'form-horizontal') do
+    .row
+      .span3
+        = label_tag :order_option, "Specific Option"
+        = select_tag :order_option, option_options, multiple: true
+      .span3
+        = label_tag :order_distributor, "Specific Distributor"
+        = select_tag :order_distributor, distributor_options, multiple: true
+      .span3
+        = label_tag :order_period, "Specific Period"
+        = select_tag :order_period, order_period_options, prompt: 'Current Period', multiple: true
+      .span3
+        = submit_tag "Filter", :class => 'btn btn-primary spaced-button'

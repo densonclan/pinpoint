@@ -1,0 +1,22 @@
+= content_for :title do
+  Pages
+= breadcrumbs [['Pages']]
+.page-header
+  %h1
+    Pages
+    %small= "(#{@pages.count})"
+    = link_to "Add new", new_page_path
+%table.table.table-striped.table-hover
+  %tr
+    %th Name
+    %th Reference no.
+    %th Box Quantity
+    %th Description
+    %th Actions
+  - @pages.each do |s|
+    %tr
+      %td= s.name
+      %td= s.reference_number
+      %td= s.box_quantity
+      %td= s.description
+      %td= link_to "Edit", edit_page_path(s)

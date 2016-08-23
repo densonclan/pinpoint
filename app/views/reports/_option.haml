@@ -1,0 +1,11 @@
+%dt= "Option #{option.name}"
+%dd
+  %p
+    %strong Orders
+    = @reporter.orders_for_option_count(option)
+  %p
+    %strong Boxes
+    = @reporter.orders_for_option_box_count(option)
+  %p
+    %strong Leaflets
+    = @reporter.orders_for_option_leaflet_count(option)

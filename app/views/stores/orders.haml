@@ -1,0 +1,17 @@
+- content_for :title do
+  Orders for Store ##{@store.account_number}
+= breadcrumbs [["Orders for Store ##{@store.account_number}"]]
+
+.page-header
+  %h1
+    Orders for Store ##{@store.account_number}
+    %small
+      (#{@orders.total_entries})
+      - if current_user.write_access?
+        = link_to "Add new", new_order_path(:account => @store.account_number)
+    = form_tag( {:action => "search"}, :method => 'get', :class => "form-searh pull-right" ) do
+      = text_field_tag :query, params[:query], { :class => "input-medium search-query", :placeholder => "e.g. account no" }
+      %button.btn{:type => "submit"} Search
+
+= render partial: 'menu'
+= render :partial => 'orders/table', :orders => @orders

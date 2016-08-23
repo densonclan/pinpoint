@@ -1,0 +1,40 @@
+<% content_for :title do %>
+  Archived Messages
+<% end %>
+<%= breadcrumbs [['Messages', messages_path], ['Archived Messages']] %>
+<div class="page-header">
+  <h1>Archived messages <small>(<%= @messages.count %>)</small></h1>
+</div>
+<%= render 'menu' %>
+<table class="table table-striped table-hover spaced-out">
+  <thead>
+    <tr>
+      <th>Read?</th>
+      <th style="width: 35%">Subject</th>
+      <th>Sent by</th>
+      <th>Sent at</th>
+      <th>Read at</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @messages.blank? %>
+      <tr><td colspan="6">Your inbox is empty.</td> </tr>
+    <% else %>
+      <% @messages.each do |t| %>
+      <tr class="">
+        <td><%= t.read ? raw('<i class="icon-ok"></i>') : '' %></td>
+        <td ><%= link_to t.subject, message_path(:id => t.id) %></td>
+        <td><%= t.user.name %></td>
+        <td><%= t.created_at.strftime('%d %B %Y at %H:%M') %></td>
+        <td><%= t.read_at ? t.read_at.strftime('%d %B %Y at %H:%M') : '-' %></td>
+        <td>
+          <%= link_to "Delete", message_path(:id => t.id), :confirm => 'Are you sure you want to delete this message?', :method => :delete, :class => 'text-error' %>
+          <%= link_to "Unarchive", unarchive_messages_path( :id => t.id ), :method => 'put' %>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @messages %>
